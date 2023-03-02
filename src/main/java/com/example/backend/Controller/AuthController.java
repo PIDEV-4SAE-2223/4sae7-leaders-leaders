@@ -61,6 +61,7 @@ public class AuthController extends GenericController<User,Long> {
             @RequestBody AuthentificationRequest request
     ) throws Exception {
 
+
         return ResponseEntity.ok(service.authenticate(request));
     }
 

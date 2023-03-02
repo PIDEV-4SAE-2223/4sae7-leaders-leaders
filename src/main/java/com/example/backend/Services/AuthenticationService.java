@@ -47,8 +47,8 @@ private final UserRepository repository;
 
 
         var user = User.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
+                .firstname(request.getFirstName())
+                .lastname(request.getLastName())
                 .email(request.getEmail())
                 .username(request.getUsername())
                 .birthdate(request.getBirthdate())

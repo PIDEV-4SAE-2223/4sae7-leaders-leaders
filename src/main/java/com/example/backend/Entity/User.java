@@ -3,6 +3,7 @@ package com.example.backend.Entity;
 import javax.persistence.*;
 import javax.transaction.Transactional;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,10 +30,10 @@ public class User implements UserDetails {
     private String username;
 
 
-    private String firstName;
+    private String firstname;
 
 
-    private String lastName;
+    private String lastname;
 
 
     private String password;
@@ -44,6 +45,12 @@ public class User implements UserDetails {
     private String adresse;
     private String email;
 
+    @ManyToMany
+    Set<Formation> formations_particip=new HashSet<>();
+    @ManyToMany
+    Set<Formation> formations_former=new HashSet<>();
+
+
     @Getter
     @Setter
     @ManyToMany(fetch = FetchType.EAGER)
@@ -54,6 +61,15 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Token> tokens ;
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL,mappedBy = "users")
+    Set<Shift> shifts=new HashSet<>();
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "userr")
+    Set<LeaveAuth> leaves = new HashSet<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "supplier")//many to many could be better
+    Set<SupplierApplication> applications = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -102,4 +118,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }
