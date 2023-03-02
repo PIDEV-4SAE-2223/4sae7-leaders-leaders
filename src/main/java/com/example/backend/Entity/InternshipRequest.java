@@ -30,8 +30,9 @@ public class InternshipRequest implements Serializable {
     Date DesiredStartDate;
     @Temporal(TemporalType.DATE)
     Date DesiredEndDate;
-    @Enumerated(EnumType.STRING)
-    Status status;
+    @Transient
+    MultipartFile cv;
+    boolean status;
 
 
     @JsonIgnore
