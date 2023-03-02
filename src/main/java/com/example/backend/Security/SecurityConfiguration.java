@@ -22,6 +22,7 @@ import javax.servlet.Filter;
 public class SecurityConfiguration {
      private final AuthenticationProvider authenticationProvider;
     private final JwtAuthentificationFilter JwtAuthFilter;
+    private final LogoutHandler logoutHandler;
 
 
     @Bean
@@ -30,6 +31,10 @@ public class SecurityConfiguration {
                .csrf()
                .disable()
                .authorizeRequests()
+               .antMatchers("/swagger-ui/**").permitAll()
+               .antMatchers("/v3/api-docs/**","/v2/api-docs", "/swagger-resources", "/swagger-resources/**",
+                       "/swagger-ui/**","/analyse/**","/types/**","/rendezvous/**","/restriction/**","/report/**","/application/**","/equipement/**","/intern/**","/internship/**","/leave/**","/offer/**","/shift/**").permitAll()
+               .antMatchers("/swagger-ui/**").permitAll()
                .antMatchers("/swagger-ui/**").permitAll()
                .antMatchers("/auth/api/**").permitAll()
                .antMatchers("/test/**").hasAuthority("ROLE_USER")
@@ -41,7 +46,12 @@ public class SecurityConfiguration {
                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                .and()
                .authenticationProvider(authenticationProvider)
-           .addFilterBefore(JwtAuthFilter,UsernamePasswordAuthenticationFilter.class);
+           .addFilterBefore(JwtAuthFilter,UsernamePasswordAuthenticationFilter.class)
+               .logout()
+               .logoutUrl("/auth/api/logout")
+               .addLogoutHandler(logoutHandler)
+               .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
+       ;
        return http.build();
 
 
