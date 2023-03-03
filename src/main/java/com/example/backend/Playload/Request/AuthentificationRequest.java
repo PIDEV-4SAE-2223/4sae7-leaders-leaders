@@ -10,5 +10,6 @@ import lombok.*;
 public class AuthentificationRequest {
     private String email;
      String password;
+    private Boolean passwordneedschange;
 
 }

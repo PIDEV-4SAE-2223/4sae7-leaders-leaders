@@ -74,6 +74,7 @@ private final UserRepository repository;
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
+
                 )
         );
         var user = repository.findByEmail(request.getEmail()).orElse(null);
