@@ -44,6 +44,7 @@ public class User implements UserDetails {
 
     private String adresse;
     private String email;
+    private Boolean passwordneedschange = true;
 
     @ManyToMany
     Set<Formation> formations_particip=new HashSet<>();
