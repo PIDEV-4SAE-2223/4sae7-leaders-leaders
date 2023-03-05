@@ -6,11 +6,10 @@ import com.example.backend.Playload.Request.AuthentificationRequest;
 import com.example.backend.Playload.Request.RegisterRequest;
 import com.example.backend.Playload.Response.AuthentificationResponse;
 import com.example.backend.Repository.RoleRepository;
-import com.example.backend.Repository.TokenRepository;
 import com.example.backend.Repository.UserRepository;
-import com.example.backend.Security.JwtService;
 import com.example.backend.Services.AuthenticationService;
-import com.example.backend.Services.IUserService;
+import com.example.backend.Validation.InvalidPasswordException;
+import com.example.backend.Validation.PasswordValidator;
 import com.example.backend.generic.GenericController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,37 +37,42 @@ public class AuthController extends GenericController<User, Long> {
     private final AuthenticationService service;
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
-    private final JwtService jwtService;
-    @Autowired
+     @Autowired
     AuthenticationManager authenticationManager;
     @Autowired
     JavaMailSender javaMailSender;
-    private IUserService iUserService;
-    private TokenRepository tokenRepository;
-    private final PasswordEncoder passwordEncoder;
+      private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordValidator passwordValidator;
 
 
     @PostMapping("/register")
-    public ResponseEntity<AuthentificationResponse> register(@RequestBody RegisterRequest request) {
-        System.out.println("fdsfdsfdsfdfdf" + request.getFirstName());
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
 
-        return ResponseEntity.ok(service.register(request));
+        try {
+            passwordValidator.validate(request.getPassword());
+            return ResponseEntity.ok(service.register(request));
+        } catch (InvalidPasswordException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
 
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> authenticate(@RequestBody AuthentificationRequest request) throws Exception {
-        User user = userRepository.findByEmail(request.getEmail()).orElse(null);
-        if (request == null) {
+    public ResponseEntity<?> authenticate(@RequestBody AuthentificationRequest request) throws InvalidPasswordException {
+
+        try {
+            return ResponseEntity.ok(service.authenticate(request));
+        } catch (UsernameNotFoundException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        }catch (javax.naming.AuthenticationException e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Just change your password ");
+        } catch (LockedException e) {
+            return ResponseEntity.status(HttpStatus.LOCKED).body("Your account has been locked");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while authenticating the user");
         }
-
-        if (user.getPasswordneedschange()) {
-            return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body("Password change required");
-        }
-
-
-        return ResponseEntity.ok(service.authenticate(request));
     }
 
     @GetMapping("/protected")
