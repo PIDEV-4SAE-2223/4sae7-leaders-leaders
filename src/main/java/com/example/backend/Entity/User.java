@@ -2,6 +2,8 @@ package com.example.backend.Entity;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -9,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,16 +38,21 @@ public class User implements UserDetails {
 
     private String lastname;
 
-
     private String password;
 
 
     private String birthdate;
 
 
+@NotBlank
     private String adresse;
+    @Email
     private String email;
     private Boolean passwordneedschange = true;
+    private int failedLoginAttempts = 0;
+    private boolean accountLocked = false;
+    private LocalDateTime lastLockTime= LocalDateTime.now();
+
 
     @ManyToMany
     Set<Formation> formations_particip=new HashSet<>();
