@@ -17,6 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      @Query("select u from User u where u.email = ?1")
      Optional<User> findByEmail(String email);
      List<User> findByShifts_StartTime(Date datt);
+
      User findByFirstnameAndLastnameAndRolesContains(String firstName, String lastName, RoleEnum t);
 
 }    
