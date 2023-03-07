@@ -12,4 +12,4 @@ public interface RoleRepository extends JpaRepository<Role, Integer> {
 
     @Query("select r from Role r where r.role = ?1")
     Set<Role> findByRole(RoleEnum role);
-}
+ }

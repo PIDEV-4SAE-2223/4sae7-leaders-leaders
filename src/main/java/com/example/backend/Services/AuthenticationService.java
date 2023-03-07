@@ -49,11 +49,10 @@ public class AuthenticationService {
 
     public AuthentificationResponse register(RegisterRequest request) {
         logger.debug("RegisterRequest object: {}", request.toString());
-//        Set<Role> roles = new LinkedHashSet<>();
-//        Role r = new Role(1,RoleEnum.ROLE_USER);
 
 
         var user = User.builder().firstname(request.getFirstName()).lastname(request.getLastName()).email(request.getEmail()).username(request.getUsername()).birthdate(request.getBirthdate()).password(passwordEncoder.encode(request.getPassword())).roles(roleRepository.findByRole(RoleEnum.ROLE_USER)).build();
+       user.setPasswordneedschange(false);
         logger.debug("RegisterRequest object: {}", request.toString());
 
         logger.debug("User object before saving to the database: {}", user);

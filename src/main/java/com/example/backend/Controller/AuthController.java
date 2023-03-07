@@ -1,6 +1,7 @@
 package com.example.backend.Controller;
 
 import com.example.backend.Entity.Role;
+import com.example.backend.Entity.RoleEnum;
 import com.example.backend.Entity.User;
 import com.example.backend.Playload.Request.AuthentificationRequest;
 import com.example.backend.Playload.Request.RegisterRequest;
@@ -85,9 +86,9 @@ public class AuthController extends GenericController<User, Long> {
             return "Hello, user!";
         }
     }
-    @PostMapping("/adduser")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        Role role = roleRepository.findById(3).orElseThrow(() -> new RuntimeException("Role not found"));
+    @PostMapping("/adduser/{RoleId}")
+    public ResponseEntity<User> createUser(@RequestBody User user,@PathVariable("RoleId") Integer id) {
+        Role role = roleRepository.findById(id).orElseThrow(() -> new RuntimeException("Role not found"));
         user.setRoles(Collections.singleton(role));
         User savedUser = userRepository.save(user);
         String message = "Welcome to our app! Your email is " + savedUser.getEmail() + " and your password is " + user.getPassword();
@@ -103,14 +104,11 @@ public class AuthController extends GenericController<User, Long> {
 
     @PostMapping("/change-password")
     public ResponseEntity<String> changePassword(@RequestParam("email") String email, @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword) {
-        // Look up the user by username
-        User user = userRepository.findByEmail(email).orElse(null);
-        // If the user doesn't exist or the old password is incorrect, return an error response
-        if (user == null ){
+         User user = userRepository.findByEmail(email).orElse(null);
+         if (user == null ){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
-        // Set the new password and mark the user as having changed their password
-        user.setPassword(passwordEncoder.encode(newPassword));
+         user.setPassword(passwordEncoder.encode(newPassword));
         user.setPasswordneedschange(false);
         userRepository.save(user);
 

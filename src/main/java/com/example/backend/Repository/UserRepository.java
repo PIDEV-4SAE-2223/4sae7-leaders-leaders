@@ -19,4 +19,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
      List<User> findByShifts_StartTime(Date datt);
      User findByFirstnameAndLastnameAndRolesContains(String firstName, String lastName, RoleEnum t);
 
-}    
+
+//     @Query(value = "SELECT u FROM user u JOIN user_roles ur ON u.id_user = ur.user_id JOIN role r ON ur.roles_id = r.id_role WHERE r.role =?1",nativeQuery = true )
+//       List<User> findAlluserByrole(RoleEnum roleEnum);
+
+@Query("SELECT u FROM User u JOIN u.roles r WHERE r.role = ?1 ")
+     List<User> findAllusersByrole(RoleEnum roleEnum);
+
+ }
