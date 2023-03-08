@@ -9,7 +9,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
@@ -19,6 +23,7 @@ import javax.servlet.Filter;
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+
 public class SecurityConfiguration {
      private final AuthenticationProvider authenticationProvider;
     private final JwtAuthentificationFilter JwtAuthFilter;
@@ -34,9 +39,6 @@ public class SecurityConfiguration {
                .antMatchers("/swagger-ui/**").permitAll()
                .antMatchers("/v3/api-docs/**","/v2/api-docs", "/swagger-resources", "/swagger-resources/**",
                        "/swagger-ui/**","/analyse/**","/types/**","/rendezvous/**","/restriction/**","/report/**","/application/**","/equipement/**","/intern/**","/internship/**","/leave/**","/offer/**","/shift/**").permitAll()
-               .antMatchers("/swagger-ui/**").permitAll()
-               .antMatchers("/swagger-ui/**").permitAll()
-               .antMatchers("/auth/api/**").permitAll()
                .antMatchers("/test/**").hasAuthority("ROLE_USER")
               // .antMatchers("/test/**").hasRole("")
                .anyRequest()
@@ -56,4 +58,8 @@ public class SecurityConfiguration {
 
 
    }
+
+
+
+
 }
