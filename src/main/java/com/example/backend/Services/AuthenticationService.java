@@ -8,6 +8,9 @@ import com.example.backend.Repository.RoleRepository;
 import com.example.backend.Repository.TokenRepository;
 import com.example.backend.Repository.UserRepository;
 import com.example.backend.Security.JwtService;
+import com.example.backend.Validation.EmailExistsException;
+import com.example.backend.Validation.InvalidPasswordException;
+import com.example.backend.Validation.PasswordValidator;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.var;
@@ -46,13 +49,19 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    @Autowired
+    private PasswordValidator passwordValidator;
+    private final UserRepository userRepository;
 
-    public AuthentificationResponse register(RegisterRequest request) {
+    public AuthentificationResponse register(RegisterRequest request) throws EmailExistsException {
         logger.debug("RegisterRequest object: {}", request.toString());
 
+        if (repository.existsByEmail(request.getEmail())) {
+            throw new EmailExistsException("Email already exists");
+        }
+         var user = User.builder().firstname(request.getFirstName()).lastname(request.getLastName()).email(request.getEmail()).username(request.getUsername()).birthdate(request.getBirthdate()).password(passwordEncoder.encode(request.getPassword())).roles(roleRepository.findByRole(RoleEnum.ROLE_USER)).build();
 
-        var user = User.builder().firstname(request.getFirstName()).lastname(request.getLastName()).email(request.getEmail()).username(request.getUsername()).birthdate(request.getBirthdate()).password(passwordEncoder.encode(request.getPassword())).roles(roleRepository.findByRole(RoleEnum.ROLE_USER)).build();
-       user.setPasswordneedschange(false);
+        user.setPasswordneedschange(false);
         logger.debug("RegisterRequest object: {}", request.toString());
 
         logger.debug("User object before saving to the database: {}", user);
@@ -63,6 +72,7 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         saveUserToken(savedUser, jwtToken);
         return AuthentificationResponse.builder().token(jwtToken).build();
+
     }
 
 //    public AuthentificationResponse authenticate(AuthentificationRequest request) throws Exception {
