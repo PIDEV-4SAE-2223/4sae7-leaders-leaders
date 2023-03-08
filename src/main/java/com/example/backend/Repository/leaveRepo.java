@@ -1,6 +1,7 @@
 package com.example.backend.Repository;
 
 import com.example.backend.Entity.LeaveAuth;
+import com.example.backend.Entity.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,5 +25,10 @@ public interface leaveRepo extends JpaRepository<LeaveAuth,Long> {
     Long getTotalApprovedLeaves();
 
     List<LeaveAuth> findByUserrId(Long userId);
-   // List<LeaveAuth> findByUserrIdAnd(Long userId, Date startTime, Date endTime);
+    List<LeaveAuth> findByStatus(Status status);
+    @Query("SELECT l FROM LeaveAuth l WHERE l.userr.id = :id AND l.status = :status")
+    List<LeaveAuth> findAcceptedLeaveAuthsByUserId(@Param("id") Long id, @Param("status") Status status);
+
+
+    // List<LeaveAuth> findByUserrIdAnd(Long userId, Date startTime, Date endTime);
 }

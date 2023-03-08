@@ -134,7 +134,7 @@ public class serviceLeave implements IleaveService{
     @Override
     // Méthode pour calculer la durée d'un congé en jours
     public Long calculateLeaveDuration(LeaveAuth leaveAuth) {
-        long diff = leaveAuth.getStartDate().getTime() - leaveAuth.getEndDate().getTime();//difference between two dates
+        long diff = leaveAuth.getEndDate().getTime() - leaveAuth.getStartDate().getTime() ;//difference between two dates
         long kl = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
         return kl;
     }
@@ -146,11 +146,39 @@ public class serviceLeave implements IleaveService{
 
     @Override
     public Long alldaysLeaves(Long id) {
-        List<LeaveAuth> leaves = this.getAllLeavesByUserId(id);
+        List<LeaveAuth> leaves = this.listesleavesAccepte(id);
         Long tot=0l;
         for(LeaveAuth leave:leaves ){
-            tot+=this.calculateLeaveDuration(leave);
+                tot += this.calculateLeaveDuration(leave);
+
         }
         return tot;
     }
+
+    @Override
+    public LeaveAuth acceptLeave(Long id)
+    {
+        LeaveAuth l =leaverepo.findById(id).orElse(null);
+        l.setStatus(Status.ACCEPTE);
+        return leaverepo.save(l);
+    }
+
+    @Override
+    public LeaveAuth reffuseLeave(Long id) {
+        LeaveAuth l =leaverepo.findById(id).orElse(null);
+        l.setStatus(Status.REFUSE);
+        return leaverepo.save(l);
+    }
+
+    @Override
+    public List<LeaveAuth> listLeaves(Status stat) {
+        return leaverepo.findByStatus(stat);
+    }
+
+    @Override
+    public List<LeaveAuth> listesleavesAccepte(Long id) {
+        return leaverepo.findAcceptedLeaveAuthsByUserId(id,Status.ACCEPTE);
+    }
+
+
 }
