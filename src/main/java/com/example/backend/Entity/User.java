@@ -76,10 +76,7 @@ public class User implements UserDetails {
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "userr")
     Set<LeaveAuth> leaves = new HashSet<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "supplier")//many to many could be better
-    Set<SupplierApplication> applications = new HashSet<>();
-
+  
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();

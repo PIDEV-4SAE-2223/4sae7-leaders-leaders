@@ -38,6 +38,8 @@ public class SecurityConfiguration {
                .antMatchers("/swagger-ui/**").permitAll()
                .antMatchers("/auth/api/**").permitAll()
                .antMatchers("/test/**").hasAuthority("ROLE_USER")
+               .antMatchers("/equipement/**").permitAll()
+               .antMatchers("/notification/**").permitAll()
               // .antMatchers("/test/**").hasRole("")
                .anyRequest()
                .authenticated()

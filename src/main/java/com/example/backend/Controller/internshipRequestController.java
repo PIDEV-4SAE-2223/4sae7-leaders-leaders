@@ -1,9 +1,7 @@
 package com.example.backend.Controller;
 
-import com.example.backend.Entity.Equipment;
 import com.example.backend.Entity.Intern;
 import com.example.backend.Entity.InternshipRequest;
-import com.example.backend.Services.IService;
 import com.example.backend.Services.InternService;
 import com.example.backend.Services.InternshipService;
 import lombok.AllArgsConstructor;
