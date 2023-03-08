@@ -1,6 +1,7 @@
 package com.example.backend.Controller;
 
 import com.example.backend.Entity.LeaveAuth;
+import com.example.backend.Entity.Status;
 import com.example.backend.Entity.User;
 import com.example.backend.Repository.leaveRepo;
 import com.example.backend.Services.IService;
@@ -68,4 +69,38 @@ public class leaveController {
     public Long totaldays(@PathVariable Long id){
         return serviceleave.alldaysLeaves(id);
     }
+    @PutMapping("/acceptLeave/{id}")
+    public LeaveAuth acceptLeave(@PathVariable Long id)
+    {
+        return serviceleave.acceptLeave(id);
+    }
+    @PutMapping("/refuseLeave/{id}")
+    public LeaveAuth reffuseLeave(@PathVariable Long id)
+    {
+        return serviceleave.reffuseLeave(id);
+    }
+
+    @GetMapping("/AcceptedLeaves")
+    public List<LeaveAuth>acceptedLeaves()
+    {
+        return serviceleave.listLeaves(Status.ACCEPTE);
+    }
+    @GetMapping("/reffusedLeaves")
+    public List<LeaveAuth>reffusedLeaves()
+    {
+        return serviceleave.listLeaves(Status.REFUSE);
+    }
+    @GetMapping("/attenteLeaves")
+    public List<LeaveAuth>attenteLeaves()
+    {
+        return serviceleave.listLeaves(Status.ENATTENTE);
+    }
+    @GetMapping("/acceptedLeaves/{id}")
+    public List<LeaveAuth>attenteLeaves(@PathVariable Long id)
+    {
+        return serviceleave.listesleavesAccepte(id);
+    }
+
+
+
 }
