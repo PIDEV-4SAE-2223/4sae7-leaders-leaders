@@ -100,6 +100,29 @@ public class leaveController {
     {
         return serviceleave.listesleavesAccepte(id);
     }
+    @GetMapping("/acceptedLeavesPerPser")
+    public List<Object[]>  acceptedLeavesPerPser()
+    {
+        return serviceleave.getAcceptedLeaveDaysByUser();
+    }
+
+    @GetMapping("/leaveStats")
+    public ResponseEntity<List<Object[]>> getLeaveStatsByStatus() {
+        List<Object[]> leaveStats = serviceleave.getLeaveStatsByStatus();
+        return ResponseEntity.ok(leaveStats);
+    }
+    @GetMapping("/usersOnLeave")
+    public ResponseEntity<List<User>> getUsersOnLeave() {
+        LocalDate now =  LocalDate.now();//localdate Type
+        Date datt= Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        List<User> usersOnLeave = serviceleave.getUsersOnLeave(datt,Status.ACCEPTE);
+        return ResponseEntity.ok(usersOnLeave);
+    }
+    @GetMapping("/leaveStatistics")
+    public ResponseEntity<List<Object[]>> getLeaveStatisticsByReason() {
+        List<Object[]> leaveStatisticsByReason = serviceleave.getLeaveStatisticsByReason();
+        return ResponseEntity.ok(leaveStatisticsByReason);
+    }
 
 
 
