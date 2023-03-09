@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface OffferRepository extends JpaRepository<Offfer , Long> {
-
+    List<Offfer> findByArchiveIsTrue();
+    List<Offfer> findByArchiveIsFalse();
 }

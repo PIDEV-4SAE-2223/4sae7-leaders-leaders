@@ -37,7 +37,21 @@ public class OffferController {
     public Offfer updateOfffer( @PathVariable Long id,@RequestBody Offfer offfer) {
         return offferService.updateOfffer(id, offfer);
     }
-
+    @PutMapping("/archiveroffre/{id}")
+    public Offfer archiverOffre(@PathVariable Long id)
+    {
+        return offferService.archiverOffre(id);
+    }
+    @GetMapping("/listArchive")
+    public List<Offfer> getArchives()
+    {
+        return offferService.listOffreArchive();
+    }
+    @GetMapping("/listNoArchive")
+    public List<Offfer> getNonArchives()
+    {
+        return offferService.listnonArchive();
+    }
 
 
 

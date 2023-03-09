@@ -44,4 +44,19 @@ public class OffferServiceImpl implements OffferService {
         return offferRepository.save(offfer);
     }
 
+    @Override
+    public Offfer archiverOffre(Long id) {
+        Offfer off=offferRepository.findById(id).orElse(null);
+        off.setArchive(true);
+        return offferRepository.save(off);
+    }
+
+    @Override
+    public List<Offfer> listOffreArchive() {
+        return offferRepository.findByArchiveIsTrue();    }
+
+    @Override
+    public List<Offfer> listnonArchive() {
+        return offferRepository.findByArchiveIsFalse();    }
+
 }

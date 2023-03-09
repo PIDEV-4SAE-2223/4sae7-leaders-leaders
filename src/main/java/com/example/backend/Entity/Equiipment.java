@@ -32,7 +32,7 @@ public class Equiipment implements Serializable {
         @OneToOne()
         private Offfer offer;
 
-        @OneToMany(mappedBy = "equipment", cascade = CascadeType.ALL)
+        @OneToMany(mappedBy = "equipment",cascade = CascadeType.ALL)
         private List<Notification> notifications;
 
     }

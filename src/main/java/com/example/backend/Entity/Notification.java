@@ -21,6 +21,6 @@ public class Notification {
     @Column(name = "status")
     private Status status;
     @ManyToOne
-    @JoinColumn(name = "equipment_id")
+    @JoinColumn(name = "id_equipment")
     private Equiipment equipment;
 }

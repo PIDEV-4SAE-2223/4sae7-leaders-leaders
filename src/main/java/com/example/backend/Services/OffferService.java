@@ -6,12 +6,13 @@ import com.example.backend.Entity.Offfer;
 import java.util.List;
 
 public interface OffferService {
-    public Offfer saveAndaddOfferToEquipment(Offfer offfer ,Long idEquipment);
-    public Offfer findById(Long id);
-    public List<Offfer> findAll();
-
-
-    public void deleteById(Long id);
-    public Offfer updateOfffer(Long id,Offfer offfer);
+     Offfer saveAndaddOfferToEquipment(Offfer offfer ,Long idEquipment);
+     Offfer findById(Long id);
+     List<Offfer> findAll();
+     void deleteById(Long id);
+     Offfer updateOfffer(Long id,Offfer offfer);
+    Offfer archiverOffre(Long id);
+    List<Offfer> listOffreArchive();
+    List<Offfer> listnonArchive();
 
 }
