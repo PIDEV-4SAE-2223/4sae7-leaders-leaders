@@ -1,6 +1,9 @@
 package com.example.backend.Services;
 
-import com.example.backend.Entity.*;
+import com.example.backend.Entity.RoleEnum;
+import com.example.backend.Entity.Token;
+import com.example.backend.Entity.TokenType;
+import com.example.backend.Entity.User;
 import com.example.backend.Playload.Request.AuthentificationRequest;
 import com.example.backend.Playload.Request.RegisterRequest;
 import com.example.backend.Playload.Response.AuthentificationResponse;
@@ -8,13 +11,13 @@ import com.example.backend.Repository.RoleRepository;
 import com.example.backend.Repository.TokenRepository;
 import com.example.backend.Repository.UserRepository;
 import com.example.backend.Security.JwtService;
-import lombok.AllArgsConstructor;
+import com.example.backend.Validation.EmailExistsException;
+import com.example.backend.Validation.PasswordValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.var;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,11 +28,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,22 +35,26 @@ public class AuthenticationService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
     private static final int MAX_FAILED_LOGIN_ATTEMPTS = 2;
-
-    @Autowired
-    RoleRepository roleRepository;
-
     private final UserRepository repository;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    @Autowired
+    RoleRepository roleRepository;
+    @Autowired
+    private PasswordValidator passwordValidator;
 
-    public AuthentificationResponse register(RegisterRequest request) {
+    public AuthentificationResponse register(RegisterRequest request) throws EmailExistsException {
         logger.debug("RegisterRequest object: {}", request.toString());
 
-
+        if (repository.existsByEmail(request.getEmail())) {
+            throw new EmailExistsException("Email already exists");
+        }
         var user = User.builder().firstname(request.getFirstName()).lastname(request.getLastName()).email(request.getEmail()).username(request.getUsername()).birthdate(request.getBirthdate()).password(passwordEncoder.encode(request.getPassword())).roles(roleRepository.findByRole(RoleEnum.ROLE_USER)).build();
-       user.setPasswordneedschange(false);
+
+        user.setPasswordneedschange(false);
         logger.debug("RegisterRequest object: {}", request.toString());
 
         logger.debug("User object before saving to the database: {}", user);
@@ -63,26 +65,9 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         saveUserToken(savedUser, jwtToken);
         return AuthentificationResponse.builder().token(jwtToken).build();
+
     }
 
-//    public AuthentificationResponse authenticate(AuthentificationRequest request) throws Exception {
-//        authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(
-//                        request.getEmail(),
-//                        request.getPassword()
-//
-//                )
-//        );
-//        var user = repository.findByEmail(request.getEmail()).orElse(null);
-//
-//
-//         var jwtToken = jwtService.generateToken(user);
-//        revokeAllUserTokens(user);
-//        saveUserToken(user, jwtToken);
-//         return AuthentificationResponse.builder()
-//                .token(jwtToken)
-//                .build();
-//    }
 
     public AuthentificationResponse authenticate(AuthentificationRequest request) throws Exception {
 
@@ -95,18 +80,6 @@ public class AuthenticationService {
         }
 
 
-        if (user.isAccountLocked()) {
-            int lockoutDurationMinutes = 1;
-            if (user.getLastLockTime().plusMinutes(lockoutDurationMinutes).isBefore(LocalDateTime.now())) {
-                user.setAccountLocked(false);
-                user.setFailedLoginAttempts(0);
-                user.setLastLockTime(null);
-                repository.save(user);
-            } else {
-                throw new LockedException("User account is locked");
-            }
-        }
-
         if (user.getFailedLoginAttempts() >= MAX_FAILED_LOGIN_ATTEMPTS) {
             user.setAccountLocked(true);
             user.setLastLockTime(LocalDateTime.now());
@@ -117,7 +90,6 @@ public class AuthenticationService {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         } catch (AuthenticationException e) {
-            // Increment the number of failed login attempts
             user.setFailedLoginAttempts(user.getFailedLoginAttempts() + 1);
             repository.save(user);
             throw e;
@@ -146,4 +118,41 @@ public class AuthenticationService {
         });
         tokenRepository.saveAll(validUserTokens);
     }
+
+    @Transactional
+    public void unblockAccount(Long userId) throws UsernameNotFoundException {
+        var user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        if (!user.isAccountLocked()) {
+            throw new IllegalStateException("User account is not locked");
+        }
+        user.setAccountLocked(false);
+        user.setFailedLoginAttempts(0);
+        user.setLastLockTime(null);
+        userRepository.save(user);
+    }
+
+    public User createUser(RegisterRequest request, RoleEnum role) throws EmailExistsException {
+
+        if (repository.existsByEmail(request.getEmail())) {
+            throw new EmailExistsException("Email already exists");
+        }
+        var user = User.builder()
+                .firstname(request.getFirstName())
+                .lastname(request.getLastName())
+                .email(request.getEmail())
+                .username(request.getUsername())
+                .birthdate(request.getBirthdate())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .roles(roleRepository.findByRole(role))
+                .build();
+
+        user.setPasswordneedschange(true);
+
+
+        var savedUser = repository.save(user);
+
+        return savedUser;
+    }
+
+
 }
