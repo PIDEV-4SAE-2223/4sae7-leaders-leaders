@@ -40,11 +40,11 @@ public class AuthController extends GenericController<User, Long> {
     private final AuthenticationService service;
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     @Autowired
     AuthenticationManager authenticationManager;
     @Autowired
     JavaMailSender javaMailSender;
-    private final PasswordEncoder passwordEncoder;
     @Autowired
     private PasswordValidator passwordValidator;
 
@@ -65,10 +65,10 @@ public class AuthController extends GenericController<User, Long> {
             javaMailSender.send(message);
             return ResponseEntity.ok(service.register(request));
 
-         } catch (InvalidPasswordException  e){
+        } catch (InvalidPasswordException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
 
-        }catch (EmailExistsException e) {
+        } catch (EmailExistsException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
 
@@ -137,6 +137,13 @@ public class AuthController extends GenericController<User, Long> {
         userRepository.save(user);
 
         return ResponseEntity.ok("Password changed successfully");
+    }
+
+    @PutMapping("/users/{userId}/unblock")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> unblockUserAccount(@PathVariable Long userId) {
+        service.unblockAccount(userId);
+        return ResponseEntity.ok().build();
     }
 
 
