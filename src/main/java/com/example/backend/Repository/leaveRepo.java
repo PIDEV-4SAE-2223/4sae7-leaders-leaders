@@ -43,6 +43,8 @@ public interface leaveRepo extends JpaRepository<LeaveAuth,Long> {
     @Query("SELECT l.userr FROM LeaveAuth l WHERE :currentDate BETWEEN l.startDate AND l.endDate AND l.status = :status")
     List<User> getUsersOnLeaveByStatus(@Param("currentDate") Date currentDate, @Param("status") Status status);
 
+    @Query("SELECT CASE WHEN COUNT(la) > 0 THEN true ELSE false END FROM LeaveAuth la WHERE la.userr.id = :userId AND la.status = :status AND :currentDate BETWEEN la.startDate AND la.endDate")
+    boolean isUserOnLeave(@Param("userId") Long userId, @Param("currentDate") Date currentDate, @Param("status") Status status);
 
 
     @Query("SELECT l.reason, COUNT(l.id) FROM LeaveAuth l GROUP BY l.reason")
