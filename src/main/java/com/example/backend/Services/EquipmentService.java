@@ -2,6 +2,7 @@ package com.example.backend.Services;
 
 
 import com.example.backend.Entity.Equiipment;
+import com.example.backend.Entity.Offfer;
 
 
 import java.util.List;
@@ -15,5 +16,5 @@ public interface EquipmentService {
     public Equiipment updateEquipment(Long id,Equiipment equipment);
     public Equiipment isFavorite(Long id) ;
     public List<Equiipment> ListFavorite();
-
+    public  List<Equiipment> findAllEquipmentWithOffer();
 }

@@ -32,7 +32,7 @@ public class EquipmentController {
     }
 
     @DeleteMapping("/delequipment/{Id}")
-    public void deleteIntern(@PathVariable Long Id) {
+    public void deleteEquipment(@PathVariable Long Id) {
         equipmentService.deleteById(Id);
     }
 
@@ -48,5 +48,9 @@ public class EquipmentController {
         return equipmentService.ListFavorite();
     }
 
+    @GetMapping("/getOfferwithequipment")
+    public List<Equiipment> getAllEquipmentWithOffer() {
+        return equipmentService.findAllEquipmentWithOffer();
+    }
 
 }

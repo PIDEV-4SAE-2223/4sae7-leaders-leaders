@@ -1,6 +1,7 @@
 package com.example.backend.Services;
 import com.example.backend.Entity.Equiipment;
 import com.example.backend.Entity.Notification;
+import com.example.backend.Entity.Offfer;
 import com.example.backend.Entity.Status;
 import com.example.backend.Repository.EquipmentRepository;
 import com.example.backend.Repository.NotifictionRepository;
@@ -20,9 +21,7 @@ public class EquipmentServiceImpl implements EquipmentService {
     private NotifictionRepository notifictionRepository;
 
     @Override
-    public Equiipment findById(Long id) {
-        return equipmentRepository.findById(id).orElse(null);
-    }
+    public Equiipment findById(Long id) {return equipmentRepository.findById(id).orElse(null);}
 
     @Override
     public List<Equiipment> findAll() {
@@ -75,7 +74,6 @@ public class EquipmentServiceImpl implements EquipmentService {
             return equipmentRepository.findByFavoriteIsTrue();
     }
 
-
     @Scheduled(cron = "0 2 9 3 ?") // Run at midnight on the first day of every month
     public void notifyExpiringEquipment() {
         Date threeMonthsFromNow = DateUtils.addMonths(new Date(), 3);
@@ -105,6 +103,9 @@ public class EquipmentServiceImpl implements EquipmentService {
         }
     }
 
+    public List<Equiipment> findAllEquipmentWithOffer() {
+        return equipmentRepository.findAllWithOffer();
+    }
 }
 
 

@@ -21,6 +21,6 @@ public class Offfer implements Serializable {
     private String descriptionOffer;
     private boolean archive;
     @OneToOne(mappedBy = "offer")
-    Equiipment equipment;
+    private Equiipment equipment;
 
 }

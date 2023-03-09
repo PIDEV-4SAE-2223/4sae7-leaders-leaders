@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -21,6 +22,25 @@ public class OffferServiceImpl implements OffferService {
         offfer.setDateCreation(new Date(System.currentTimeMillis()));
         offfer.setArchive(offfer.isArchive());
         offfer.setEquipment((equipment));
+        return offferRepository.save(offfer);
+    }
+
+    @Override
+    public Offfer findById(Long id) {return offferRepository.findById(id).orElse(null);}
+
+    @Override
+    public List<Offfer> findAll() {return  offferRepository.findAll();}
+
+    @Override
+    public void deleteById(Long id) {offferRepository.deleteById(id);}
+
+    @Override
+    public Offfer updateOfffer(Long id, Offfer offfer) {
+        Offfer of= offferRepository.findById(id).get();
+        of.setArchive(offfer.isArchive());
+        of.setDateCreation(new Date(System.currentTimeMillis()));
+        of.setEquipment(offfer.getEquipment());
+        of.setDescriptionOffer(offfer.getDescriptionOffer());
         return offferRepository.save(offfer);
     }
 
