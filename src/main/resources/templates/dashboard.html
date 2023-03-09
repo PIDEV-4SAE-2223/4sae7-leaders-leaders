@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+<h1>Dashboard</h1>
+<p>Total user count: <span th:text="${totalUserCount}"></span></p>
+<p>Locked user count: <span th:text="${lockedUserCount}"></span></p>
+<p>Top failed login users:</p>
+<ul>
+    <li th:each="user : ${topFailedLoginUsers}" th:text="${user}"></li>
+</ul>
+</body>
+</html>

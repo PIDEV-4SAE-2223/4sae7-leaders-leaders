@@ -9,15 +9,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
-
-import javax.servlet.Filter;
 
 @Configuration
 @EnableWebSecurity
@@ -25,39 +19,37 @@ import javax.servlet.Filter;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 
 public class SecurityConfiguration {
-     private final AuthenticationProvider authenticationProvider;
+    private final AuthenticationProvider authenticationProvider;
     private final JwtAuthentificationFilter JwtAuthFilter;
     private final LogoutHandler logoutHandler;
 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-       http
-               .csrf()
-               .disable()
-               .authorizeRequests()
-               .antMatchers("/swagger-ui/**","/auth/api/authenticate","/auth/api/register").permitAll()
-               .antMatchers("/v3/api-docs/**","/v2/api-docs", "/swagger-resources", "/swagger-resources/**",
-                       "/swagger-ui/**","/analyse/**","/types/**","/rendezvous/**","/restriction/**","/report/**","/application/**","/equipement/**","/intern/**","/internship/**","/leave/**","/offer/**","/shift/**").permitAll()
-               .anyRequest()
-               .authenticated()
-               .and()
-               .sessionManagement()
-               .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-               .and()
-               .authenticationProvider(authenticationProvider)
-           .addFilterBefore(JwtAuthFilter,UsernamePasswordAuthenticationFilter.class)
-               .logout()
-               .logoutUrl("/auth/api/logout")
-               .addLogoutHandler(logoutHandler)
-               .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-       ;
-       return http.build();
+        http
+                .csrf()
+                .disable()
+                .authorizeRequests()
+                .antMatchers("/swagger-ui/**", "/auth/api/authenticate", "/auth/api/register", "/Dashboard/**").permitAll()
+                .antMatchers("/v3/api-docs/**", "/v2/api-docs", "/swagger-resources", "/swagger-resources/**",
+                        "/swagger-ui/**", "/analyse/**", "/types/**", "/rendezvous/**", "/restriction/**", "/report/**", "/application/**", "/equipement/**", "/intern/**", "/internship/**", "/leave/**", "/offer/**", "/shift/**").permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(JwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout()
+                .logoutUrl("/auth/api/logout")
+                .addLogoutHandler(logoutHandler)
+                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
+        ;
+        return http.build();
 
 
-   }
-
-
+    }
 
 
 }

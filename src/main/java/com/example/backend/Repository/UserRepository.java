@@ -2,6 +2,8 @@ package com.example.backend.Repository;
 
 import com.example.backend.Entity.RoleEnum;
 import com.example.backend.Entity.User;
+import org.springframework.beans.MutablePropertyValues;
+import org.springframework.beans.PropertyValues;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -28,4 +30,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 @Query("SELECT u FROM User u JOIN u.roles r WHERE r.role = ?1 ")
      List<User> findAllusersByrole(RoleEnum roleEnum);
 
- }
+     List<User> findByAccountLockedTrue();
+
+     List<User> findByFailedLoginAttemptsGreaterThanOrderByFailedLoginAttemptsDesc(int count);
+}
