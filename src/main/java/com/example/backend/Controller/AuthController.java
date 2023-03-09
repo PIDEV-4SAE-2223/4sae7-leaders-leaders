@@ -4,6 +4,7 @@ import com.example.backend.Entity.RoleEnum;
 import com.example.backend.Entity.User;
 import com.example.backend.Playload.Request.AuthentificationRequest;
 import com.example.backend.Playload.Request.RegisterRequest;
+import com.example.backend.Playload.Response.AuthentificationResponse;
 import com.example.backend.Repository.RoleRepository;
 import com.example.backend.Repository.UserRepository;
 import com.example.backend.Services.AuthenticationService;
@@ -101,7 +102,7 @@ public class AuthController extends GenericController<User, Long> {
 
         javaMailSender.send(message);
         try {
-            User user = service.createUser(request, roleEnum);
+            AuthentificationResponse user = service.createUser(request, roleEnum);
 
             return ResponseEntity.ok(user);
 

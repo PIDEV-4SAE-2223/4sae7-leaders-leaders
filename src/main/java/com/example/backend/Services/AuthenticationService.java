@@ -131,7 +131,7 @@ public class AuthenticationService {
         userRepository.save(user);
     }
 
-    public User createUser(RegisterRequest request, RoleEnum role) throws EmailExistsException {
+    public AuthentificationResponse createUser(RegisterRequest request, RoleEnum role) throws EmailExistsException {
 
         if (repository.existsByEmail(request.getEmail())) {
             throw new EmailExistsException("Email already exists");
@@ -151,7 +151,9 @@ public class AuthenticationService {
 
         var savedUser = repository.save(user);
 
-        return savedUser;
+        var jwtToken = jwtService.generateToken(user);
+        saveUserToken(savedUser, jwtToken);
+        return AuthentificationResponse.builder().token(jwtToken).build();
     }
 
 
