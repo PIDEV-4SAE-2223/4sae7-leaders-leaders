@@ -25,5 +25,6 @@ public interface IleaveService extends IService<LeaveAuth> {
      List<Object[]> getLeaveStatsByStatus();
      List<User> getUsersOnLeave(Date currentDate,Status stat);
      List<Object[]> getLeaveStatisticsByReason();
+     boolean checkuserLeave(Long id);
 
 }
