@@ -23,7 +23,8 @@ public interface shiftRepo  extends JpaRepository<Shift,Long> {
     @Query("SELECT DISTINCT i FROM Intern i JOIN i.shift s WHERE s.startTime >= :startOfDay AND s.startTime < :endOfDay")
     List<Intern> findAllInternsForDay(@Param("startOfDay") LocalDateTime startOfDay, @Param("endOfDay") LocalDateTime endOfDay);
 
-
+    @Query("SELECT s FROM Shift s INNER JOIN s.interns i WHERE i.cin = :internId")
+    List<Shift> findByInternId(@Param("internId") Long internId);
 
 
 }

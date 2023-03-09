@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -73,5 +74,15 @@ public class internshipRequestController {
         return internshipservice.refuseInternship(Id);
     }
 
+
+    @GetMapping("/statistics")
+    public ResponseEntity<Map<Status, Long>> getRequestStatistics() {
+        Map<Status, Long> statistics = internshipservice.countByStatus();
+        return ResponseEntity.ok(statistics);
+    }
+    @GetMapping("/statisticsByDepartement")
+    public List<Object[]> StatisticsDepartement() {
+        return internshipservice.countbyDepartement();
+    }
 }
 

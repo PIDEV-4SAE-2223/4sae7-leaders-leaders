@@ -179,6 +179,25 @@ public class serviceLeave implements IleaveService{
     public List<LeaveAuth> listesleavesAccepte(Long id) {
         return leaverepo.findAcceptedLeaveAuthsByUserId(id,Status.ACCEPTE);
     }
+    @Override
+    public List<Object[]> getAcceptedLeaveDaysByUser() {
+        return leaverepo.getAcceptedLeaveDaysByUser(Status.ACCEPTE);
+    }
+
+    @Override
+    public List<Object[]> getLeaveStatsByStatus() {
+        return leaverepo.getLeaveStatsByStatus();
+    }
+
+    @Override
+    public List<User> getUsersOnLeave(Date currentDate,Status stat) {
+        return leaverepo.getUsersOnLeaveByStatus(currentDate,stat);
+    }
+
+    @Override
+    public List<Object[]> getLeaveStatisticsByReason() {
+        return leaverepo.getLeaveStatisticsByReason();
+    }
 
 
 }
