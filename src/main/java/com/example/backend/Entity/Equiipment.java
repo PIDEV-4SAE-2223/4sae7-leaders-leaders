@@ -29,8 +29,8 @@ public class Equiipment implements Serializable {
 
         boolean favorite;
 
-      /*  @OneToOne()
-        private Offfer offer;*/
+        @OneToOne()
+        private Offfer offer;
 
         @OneToMany(mappedBy = "equipment")
         private List<Notification> notifications;

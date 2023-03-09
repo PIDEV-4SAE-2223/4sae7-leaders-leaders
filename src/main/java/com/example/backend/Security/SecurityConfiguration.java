@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                .antMatchers("/test/**").hasAuthority("ROLE_USER")
                .antMatchers("/equipement/**").permitAll()
                .antMatchers("/notification/**").permitAll()
+               .antMatchers("/Offfer/**").permitAll()
               // .antMatchers("/test/**").hasRole("")
                .anyRequest()
                .authenticated()

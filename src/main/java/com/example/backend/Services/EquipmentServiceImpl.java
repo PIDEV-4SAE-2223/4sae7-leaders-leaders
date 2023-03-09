@@ -6,7 +6,6 @@ import com.example.backend.Repository.EquipmentRepository;
 import com.example.backend.Repository.NotifictionRepository;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.time.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -49,12 +48,12 @@ public class EquipmentServiceImpl implements EquipmentService {
     public Equiipment updateEquipment(Long id, Equiipment equipment) {
         Equiipment eq= equipmentRepository.findById(id).get();
         eq.setNameequipment(equipment.getNameequipment());
-        //eq.setOffer(equipment.getOffer());
         eq.setFavorite(equipment.isFavorite());
         eq.setDateEndUsefullLife((equipment.getDateEndUsefullLife()));
         eq.setDescription(equipment.getDescription());
         eq.setStatus(equipment.getStatus());
         eq.setPicture(equipment.getPicture());
+        eq.setOffer(equipment.getOffer());
         return equipmentRepository.save(eq);
 
     }
@@ -77,7 +76,7 @@ public class EquipmentServiceImpl implements EquipmentService {
     }
 
 
-    @Scheduled(cron = "0 23 8 3 ?") // Run at midnight on the first day of every month
+    @Scheduled(cron = "0 2 9 3 ?") // Run at midnight on the first day of every month
     public void notifyExpiringEquipment() {
         Date threeMonthsFromNow = DateUtils.addMonths(new Date(), 3);
         List<Equiipment> equipments = equipmentRepository.findAll();
@@ -88,7 +87,7 @@ public class EquipmentServiceImpl implements EquipmentService {
                     equipmentRepository.save(equipment);
                     Notification newNotification= new Notification();
                     newNotification.setMessage("Equipment " + equipment.getIdEquipment() + "  will be expired " + equipment.getDateEndUsefullLife());
-                    newNotification.setCreatedAt(new Date());
+                    newNotification.setCreatedAt(new Date(System.currentTimeMillis()));
                     newNotification.setEquipment(equipment);
                     newNotification.setStatus(Status.WillBeExpired);
                     notifictionRepository.save(newNotification);
@@ -97,7 +96,7 @@ public class EquipmentServiceImpl implements EquipmentService {
                     equipmentRepository.save(equipment);
                     Notification newNotification= new Notification();
                     newNotification.setMessage("Equipment " + equipment.getIdEquipment() + "  expired " + equipment.getDateEndUsefullLife());
-                    newNotification.setCreatedAt(new Date());
+                    newNotification.setCreatedAt(new Date(System.currentTimeMillis()));
                     newNotification.setEquipment(equipment);
                     newNotification.setStatus(Status.Expired);
                     notifictionRepository.save(newNotification);
