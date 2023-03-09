@@ -21,6 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
       Boolean existsByEmail(String email);
      List<User> findByShifts_StartTime(Date datt);
+
      User findByFirstnameAndLastnameAndRolesContains(String firstName, String lastName, RoleEnum t);
 
 
