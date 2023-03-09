@@ -43,7 +43,12 @@ public class User implements UserDetails {
     private String lastname;
     private String password;
     private String birthdate;
-    @NotBlank
+
+    private Sexe sexe;
+    private int age;
+
+
+
     private String adresse;
     @Email
     private String email;
