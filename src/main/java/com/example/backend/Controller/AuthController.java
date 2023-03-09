@@ -90,16 +90,16 @@ public class AuthController extends GenericController<User, Long> {
     @PostMapping("/createNewUser/{roleEnum}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> createUser(@RequestBody RegisterRequest request, @PathVariable RoleEnum roleEnum) throws EmailExistsException, MessagingException {
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        helper.setFrom("#########");
-        helper.setTo(request.getEmail());
-        helper.setSubject("Welcome to Our Laboratory");
-
-        String htmlMsg = "<html><head><style>" + "body { background-color: #f1f1f1; font-family: Arial, sans-serif; }" + ".container { max-width: 600px; margin: auto; background-color: #fff; padding: 20px; border-radius: 10px; }" + "h1 { color: #007bff; font-size: 28px; }" + "p { font-size: 18px; line-height: 1.5; }" + "</style></head><body>" + "<div class='container'>" + "<h1>Welcome to HealthCare Management App!</h1>" + "<p>Hello " + request.getFirstName() + " Welcome to our app! Your email is " + request.getEmail() + " and your password is " + request.getPassword() + " ,</p>" + "<p>If you have any questions or concerns, please do not hesitate to contact us. We look forward to serving you!</p>" + "<p>Best regards,<br/>The HealthCare Management Team</p>" + "</div></body></html>";
-        helper.setText(htmlMsg, true);
-
-        javaMailSender.send(message);
+//        MimeMessage message = javaMailSender.createMimeMessage();
+//        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+//        helper.setFrom("#########");
+//        helper.setTo(request.getEmail());
+//        helper.setSubject("Welcome to Our Laboratory");
+//
+//        String htmlMsg = "<html><head><style>" + "body { background-color: #f1f1f1; font-family: Arial, sans-serif; }" + ".container { max-width: 600px; margin: auto; background-color: #fff; padding: 20px; border-radius: 10px; }" + "h1 { color: #007bff; font-size: 28px; }" + "p { font-size: 18px; line-height: 1.5; }" + "</style></head><body>" + "<div class='container'>" + "<h1>Welcome to HealthCare Management App!</h1>" + "<p>Hello " + request.getFirstName() + " Welcome to our app! Your email is " + request.getEmail() + " and your password is " + request.getPassword() + " ,</p>" + "<p>If you have any questions or concerns, please do not hesitate to contact us. We look forward to serving you!</p>" + "<p>Best regards,<br/>The HealthCare Management Team</p>" + "</div></body></html>";
+//        helper.setText(htmlMsg, true);
+//
+//        javaMailSender.send(message);
         try {
             User user = service.createUser(request, roleEnum);
 
@@ -114,8 +114,8 @@ public class AuthController extends GenericController<User, Long> {
     }
 
 
-    @PostMapping("/change-password")
-    public ResponseEntity<String> changePassword(@RequestParam("email") String email, @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword) {
+    @PostMapping("/changepassword/{email}/{newPassword}")
+    public ResponseEntity<String> changePassword(@RequestParam("email") String email, @RequestParam("newPassword") String newPassword) {
         User user = userRepository.findByEmail(email).orElse(null);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
@@ -126,6 +126,7 @@ public class AuthController extends GenericController<User, Long> {
 
         return ResponseEntity.ok("Password changed successfully");
     }
+
 
     @PutMapping("/users/{userId}/unblock")
     @PreAuthorize("hasRole('ROLE_ADMIN')")

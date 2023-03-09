@@ -142,7 +142,8 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .username(request.getUsername())
                 .birthdate(request.getBirthdate())
-                .password(passwordEncoder.encode(request.getPassword()))
+                //.password(passwordEncoder.encode(request.getPassword()))
+                .password(request.getPassword())
                 .roles(roleRepository.findByRole(role))
                 .build();
 
