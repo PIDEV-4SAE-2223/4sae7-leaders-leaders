@@ -26,6 +26,8 @@ public class LeaveAuth implements Serializable {
     @Enumerated(EnumType.STRING)
     Reason reason;
     String verification;
+    @Enumerated(EnumType.STRING)
+    Status status;
 
 
     @ManyToOne
