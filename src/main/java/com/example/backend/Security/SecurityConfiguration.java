@@ -33,7 +33,7 @@ public class SecurityConfiguration {
                .authorizeRequests()
                .antMatchers("/swagger-ui/**").permitAll()
                .antMatchers("/v3/api-docs/**","/v2/api-docs", "/swagger-resources", "/swagger-resources/**",
-                       "/swagger-ui/**","/analyse/**","/types/**","/rendezvous/**","/restriction/**","/report/**","/application/**","/equipement/**","/intern/**","/internship/**","/leave/**","/offer/**","/shift/**").permitAll()
+                       "/swagger-ui/**","/analyse/**","/types/**","/rendezvous/**","/restriction/**","/report/**","/application/**","/equipement/**","/intern/**","/internship/**","/leave/**","/offer/**","/shift/**","/api/**").permitAll()
                .antMatchers("/swagger-ui/**").permitAll()
                .antMatchers("/swagger-ui/**").permitAll()
                .antMatchers("/auth/api/**").permitAll()

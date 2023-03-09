@@ -42,6 +42,8 @@ public class User implements UserDetails {
 
 
     private String birthdate;
+    private Sexe sexe;
+    private int age;
 
 
 @NotBlank
