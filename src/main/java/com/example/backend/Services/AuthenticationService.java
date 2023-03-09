@@ -68,24 +68,6 @@ public class AuthenticationService {
 
     }
 
-//    public AuthentificationResponse authenticate(AuthentificationRequest request) throws Exception {
-//        authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(
-//                        request.getEmail(),
-//                        request.getPassword()
-//
-//                )
-//        );
-//        var user = repository.findByEmail(request.getEmail()).orElse(null);
-//
-//
-//         var jwtToken = jwtService.generateToken(user);
-//        revokeAllUserTokens(user);
-//        saveUserToken(user, jwtToken);
-//         return AuthentificationResponse.builder()
-//                .token(jwtToken)
-//                .build();
-//    }
 
     public AuthentificationResponse authenticate(AuthentificationRequest request) throws Exception {
 
@@ -108,7 +90,6 @@ public class AuthenticationService {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         } catch (AuthenticationException e) {
-            // Increment the number of failed login attempts
             user.setFailedLoginAttempts(user.getFailedLoginAttempts() + 1);
             repository.save(user);
             throw e;
@@ -148,6 +129,29 @@ public class AuthenticationService {
         user.setFailedLoginAttempts(0);
         user.setLastLockTime(null);
         userRepository.save(user);
+    }
+
+    public User createUser(RegisterRequest request, RoleEnum role) throws EmailExistsException {
+
+        if (repository.existsByEmail(request.getEmail())) {
+            throw new EmailExistsException("Email already exists");
+        }
+        var user = User.builder()
+                .firstname(request.getFirstName())
+                .lastname(request.getLastName())
+                .email(request.getEmail())
+                .username(request.getUsername())
+                .birthdate(request.getBirthdate())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .roles(roleRepository.findByRole(role))
+                .build();
+
+        user.setPasswordneedschange(true);
+
+
+        var savedUser = repository.save(user);
+
+        return savedUser;
     }
 
 
