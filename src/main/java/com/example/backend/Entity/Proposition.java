@@ -27,7 +27,7 @@ public class Proposition implements Serializable {
     @JoinColumn(name = "quest_quiz_id")
     @JsonIgnore
     private QuestQuiz quest_quiz;
-    @ManyToMany( mappedBy = "answers", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "answers", cascade = CascadeType.ALL)
     @JsonIgnore
     Set<Answer_learner> answer_learners = new HashSet<>();
 }
