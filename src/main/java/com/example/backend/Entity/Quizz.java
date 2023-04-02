@@ -16,17 +16,16 @@ import java.util.Set;
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Quizz implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
-    Long id;
-    String name;
+    private Long id;
+    private String title;
+    private String description;
     @ManyToOne
-    Formation formation;
+    @JoinColumn(name = "formation_id")
+    private Formation formation;
 
     @OneToMany( mappedBy = "quizz", cascade = CascadeType.ALL)
-    @JsonIgnore
-    Set<Quest_quiz> quest_quizs=new HashSet<>();
-
+    Set<QuestQuiz> quest_quizs = new HashSet<>();
 }

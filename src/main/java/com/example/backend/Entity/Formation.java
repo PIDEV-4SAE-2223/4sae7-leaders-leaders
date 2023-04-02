@@ -18,50 +18,36 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Formation implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
-    Long id;
-    String name;
-
-
-    @JsonFormat(pattern="yyyy-MM-dd")
+    private Long id;
+    private String name;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    Date start_date;
-
-    @JsonFormat(pattern="yyyy-MM-dd")
+    private Date start_date;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    Date end_date;
+    private Date end_date;
     @JsonIgnore
-    int period=0;
+    private int period = 0;
+
     public void setPeriod(int period) {
         int p;
         p = ((int) ((start_date.getTime() - end_date.getTime()) / (24 * 60 * 60 * 1000)));
         this.period = Math.abs(p);
     }
 
-    float cost;
-
-    @ManyToMany( mappedBy = "formations_particip", cascade = CascadeType.ALL)
+    private float cost;
+    @ManyToMany(mappedBy = "formations_particip", cascade = CascadeType.ALL)
     @JsonIgnore
-    Set<User> participants=new HashSet<>();
-
-    @ManyToMany( mappedBy = "formations_former", cascade = CascadeType.ALL)
+    Set<User> participants = new HashSet<>();
+    @ManyToMany(mappedBy = "formations_former", cascade = CascadeType.ALL)
     @JsonIgnore
-    Set<User> formers=new HashSet<>();
-
-
-
-    @OneToMany( mappedBy = "formation", cascade = CascadeType.ALL)
+    Set<User> formers = new HashSet<>();
+    @OneToMany(mappedBy = "formation", cascade = CascadeType.ALL)
     @JsonIgnore
-    Set<Quizz> quizzes=new HashSet<>();
-
+    Set<Quizz> quizzes = new HashSet<>();
     @ManyToOne
-    Certificat  certificat;
+    private Certificat certificat;
 }
-
-
-

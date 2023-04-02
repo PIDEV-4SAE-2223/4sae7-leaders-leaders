@@ -30,7 +30,7 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/swagger-ui/**", "/auth/api/authenticate", "/auth/api/register", "/Dashboard/**", "/roles", "/auth/api/change-password").permitAll()
+                .antMatchers("/swagger-ui/**", "/auth/api/authenticate","/save","/api/feedback/**","/api/formation/**", "/api/certificat/**", "/api/quizz/**", "/api/proposition/**", "/auth/api/register", "/Dashboard/**", "/roles", "/auth/api/change-password").permitAll()
                 .antMatchers("/v3/api-docs/**", "/v2/api-docs", "/swagger-resources", "/swagger-resources/**",
                         "/swagger-ui/**", "/analyse/**", "/types/**", "/rendezvous/**", "/restriction/**", "/report/**", "/application/**", "/equipement/**", "/intern/**", "/internship/**", "/leave/**", "/offer/**", "/shift/**").permitAll()
                 .anyRequest()
@@ -45,7 +45,8 @@ public class SecurityConfiguration {
                 .logoutUrl("/auth/api/logout")
                 .addLogoutHandler(logoutHandler)
                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-        ;
+                .and().csrf().disable();
+        http.csrf().disable();
         return http.build();
 
 
