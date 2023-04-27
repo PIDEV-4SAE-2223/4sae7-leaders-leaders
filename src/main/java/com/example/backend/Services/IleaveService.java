@@ -2,8 +2,10 @@ package com.example.backend.Services;
 
 import com.example.backend.Entity.LeaveAuth;
 import com.example.backend.Entity.Status;
+import com.example.backend.Entity.User;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Date;
 import java.util.List;
 
 public interface IleaveService extends IService<LeaveAuth> {
@@ -19,5 +21,10 @@ public interface IleaveService extends IService<LeaveAuth> {
 
      List<LeaveAuth> listLeaves(Status stat);
      List<LeaveAuth> listesleavesAccepte(Long id);
+     List<Object[]> getAcceptedLeaveDaysByUser();
+     List<Object[]> getLeaveStatsByStatus();
+     List<User> getUsersOnLeave(Date currentDate,Status stat);
+     List<Object[]> getLeaveStatisticsByReason();
+     boolean checkuserLeave(Long id);
 
 }

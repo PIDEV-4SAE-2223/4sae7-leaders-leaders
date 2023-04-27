@@ -33,3 +33,4 @@ public class LeaveAuth implements Serializable {
     @ManyToOne
     User userr;
 }
+

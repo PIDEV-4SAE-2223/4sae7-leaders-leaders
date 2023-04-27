@@ -114,13 +114,19 @@ public class serviceLeave implements IleaveService{
     @Override
     public ResponseEntity<?> affecterLeaveUser(Long Idl, Long idu) {
         try{
+            LocalDate now =  LocalDate.now();//localdate Type
+            Date datt= Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
             LeaveAuth l = leaverepo.findById(Idl).orElse(null);
+            boolean test =leaverepo.isUserOnLeave(idu,datt,Status.ACCEPTE);
             User u = userrepo.findById(idu).orElse(null);
             if(l == null){
                 return ResponseEntity.badRequest().body("leave does not exist !!!!");
             }
             if(u == null){
                 return ResponseEntity.badRequest().body("user does not exist!!!!");
+            }
+            if(test){
+                return ResponseEntity.badRequest().body("user is in vacationq!!!!");
             }
             l.setUserr(u);
             leaverepo.save(l);
@@ -178,6 +184,32 @@ public class serviceLeave implements IleaveService{
     @Override
     public List<LeaveAuth> listesleavesAccepte(Long id) {
         return leaverepo.findAcceptedLeaveAuthsByUserId(id,Status.ACCEPTE);
+    }
+    @Override
+    public List<Object[]> getAcceptedLeaveDaysByUser() {
+        return leaverepo.getAcceptedLeaveDaysByUser(Status.ACCEPTE);
+    }
+
+    @Override
+    public List<Object[]> getLeaveStatsByStatus() {
+        return leaverepo.getLeaveStatsByStatus();
+    }
+
+    @Override
+    public List<User> getUsersOnLeave(Date currentDate,Status stat) {
+        return leaverepo.getUsersOnLeaveByStatus(currentDate,stat);
+    }
+
+    @Override
+    public List<Object[]> getLeaveStatisticsByReason() {
+        return leaverepo.getLeaveStatisticsByReason();
+    }
+
+    @Override
+    public boolean checkuserLeave(Long id) {
+        LocalDate now =  LocalDate.now();//localdate Type
+        Date datt= Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return leaverepo.isUserOnLeave(id,datt,Status.ACCEPTE);
     }
 
 

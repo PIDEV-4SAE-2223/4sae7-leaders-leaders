@@ -31,6 +31,7 @@ public class SecurityConfiguration {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/swagger-ui/**", "/auth/api/authenticate", "/auth/api/register", "/Dashboard/**", "/roles", "/auth/api/**").permitAll()
+                .antMatchers("/swagger-ui/**", "/auth/api/authenticate", "/auth/api/register", "/Dashboard/**", "/roles", "/auth/api/change-password").permitAll()
                 .antMatchers("/v3/api-docs/**", "/v2/api-docs", "/swagger-resources", "/swagger-resources/**",
                         "/swagger-ui/**", "/analyse/**", "/types/**", "/rendezvous/**", "/restriction/**", "/report/**", "/application/**", "/equipement/**", "/intern/**", "/internship/**", "/leave/**", "/offer/**", "/shift/**").permitAll()
                 .anyRequest()

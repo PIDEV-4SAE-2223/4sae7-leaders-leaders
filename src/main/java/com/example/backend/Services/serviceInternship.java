@@ -1,5 +1,6 @@
 package com.example.backend.Services;
 
+import com.example.backend.Entity.Departement;
 import com.example.backend.Entity.Intern;
 import com.example.backend.Entity.InternshipRequest;
 import com.example.backend.Entity.Status;
@@ -10,10 +11,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -181,4 +186,15 @@ public class serviceInternship implements InternshipService {
         }
 
     }
+    @Override
+    public Map<Status, Long> countByStatus() {
+        return internshipRepo.countByStatusMap();
+    }
+
+    @Override
+    public List<Object[]> countbyDepartement() {
+        return internshipRepo.countByDepartmentAndStatus(Status.ENATTENTE);
+    }
+
+
 }
