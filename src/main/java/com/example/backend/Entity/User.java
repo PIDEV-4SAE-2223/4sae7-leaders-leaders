@@ -24,9 +24,14 @@ public class User implements UserDetails {
     @ManyToMany
     @JsonIgnore
     Set<Formation> formations_particip = new HashSet<>();
-    @ManyToMany
+
+    @OneToMany
     @JsonIgnore
     Set<Formation> formations_former = new HashSet<>();
+
+
+
+
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
     Set<Shift> shifts = new HashSet<>();

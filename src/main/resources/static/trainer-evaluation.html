@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Feedback</title>
+
+</head>
+<body>
+<div align="center">
+	<h1>Feedback</h1>
+	<form  th:action="@{/api/feedback/save/1/4}" th:object="${com.example.backend.Entity.EvaluationTraining}" method="post">
+
+		<table border="0" cellpadding="10">
+			<tr>
+				<td>
+					<p>1) Were the training objectives clearly defined at the beginning of the training?</p>
+					<p><input type="radio" value="10"  th:field="*{question_1}"  /><label>Yes</label></p>
+					<p><input type="radio" value="0"  th:field="*{question_1}" /><label>No</label></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>2) I would recommend this training to my colleagues</p>
+					<p><input type="radio" value="10" th:field="*{question_2}" /><label>Yes</label></p>
+					<p><input type="radio" value="0" th:field="*{question_2}" /><label>No</label></p>
+				</td>
+			</tr>
+			<tr>
+				<td>3) Did the level of the former seem to you:
+					<p><input type="radio" value="0" th:field="*{question_3}" /><label>Bad</label></p>
+					<p><input type="radio" value="5" th:field="*{question_3}" /><label>Good</label></p>
+					<p><input type="radio" value="10" th:field="*{question_3}" /><label>Very Good</label></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>4) Did the trainers use a language:</p>
+					<p><input type="radio" value="0" th:field="*{question_4}" /><label>Too simple</label></p>
+					<p><input type="radio" value="5" th:field="*{question_4}" /><label>Adapted</label></p>
+					<p><input type="radio" value="10" th:field="*{question_4}" /><label>Too technical</label></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>5 ) How would you rate the skills demonstrated by the former?</p>
+					<p><input type="radio" value="20" th:field="*{question_5}" /><label>Extremely competent </label></p>
+					<p><input type="radio" value="15" th:field="*{question_5}" /><label>Very competent</label></p>
+					<p><input type="radio" value="10" th:field="*{question_5}" /><label>Quite competent</label></p>
+					<p><input type="radio" value="5" th:field="*{question_5}" /><label>Not very competent</label></p>
+					<p><input type="radio" value="0" th:field="*{question_5}" /><label>Not at all competent</label></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>6) Did the alternation of “theory” moments with practical work seem balanced to you?</p>
+					<p><input type="radio" value="10" th:field="*{question_6}" /><label>Yes</label></p>
+					<p><input type="radio" value="0" th:field="*{question_6}" /><label>No</label></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>7) Overall, what do you think of the availability the  former?</p>
+					<p><input type="radio" value="0" th:field="*{question_7}" /><label>Very bad</label></p>
+					<p><input type="radio" value="5" th:field="*{question_7}" /><label>Bad</label></p>
+					<p><input type="radio" value="10" th:field="*{question_7}" /><label>Neither bad nor good</label></p>
+					<p><input type="radio" value="15" th:field="*{question_7}" /><label>Good</label></p>
+					<p><input type="radio" value="20" th:field="*{question_7}" /><label>Very good</label></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>8) Quelle partie de la formation auriez-vous souhaité voir plus développée?</p>
+					<p><input type="checkbox" value="5" th:field="*{question_8}" /><label>Partie 1</label></p>
+					<p><input type="checkbox" value="5" th:field="*{question_8}" /><label>Partie 2</label></p>
+					<p><input type="checkbox" value="5" th:field="*{question_8}" /><label>Partie 3</label></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>9) Selon vous, les objectifs de la formation ont-ils été atteints ?</p>
+					<p><input type="radio" value="10" th:field="*{question_9}" /><label>Oui</label></p>
+					<p><input type="radio" value="0" th:field="*{question_9}" /><label>Non</label></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>10) Merci d'indiquer, le cas échéant, vos commentaires:</p>
+					<p>
+						<textarea th:field="*{comment}" rows="5" cols="80" ></textarea>
+					</p>
+				</td>
+			</tr>
+			<input type="hidden" name="trainer_id"  value="1"/>
+			<input type="hidden" name="learner_id" value="4" />
+			<input type="hidden" name="score" value="0" />
+
+			<tr>
+				<td colspan="2"><button type="submit" class="btn primary">Envoyer</button></td>
+			</tr>
+		</table>
+	</form>
+</div>
+</body>
+</html>

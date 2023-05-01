@@ -1,51 +1,32 @@
 package com.example.backend.Controller;
 
 import com.example.backend.Entity.Certificat;
-import com.example.backend.Entity.Formation;
-import com.example.backend.Repository.CertificatRepository;
-import com.example.backend.Repository.FormationRepository;
-import com.example.backend.Services.CertificatService;
+import com.example.backend.Services.ICertificatService;
 import com.example.backend.generic.GenericController;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/certificat")
+@AllArgsConstructor
 public class CertificatControler extends GenericController<Certificat,Long> {
-    @Autowired
-    private CertificatRepository certificatRepository;
 
-    @Autowired
-    private FormationRepository formationRepository;
+    private final ICertificatService certificatService;
 
-    @Autowired
-    private CertificatService certificatService;
-
-    @PostMapping("/add/formation/{idFormation}")
+    @PostMapping("/AddAndAssignToFormation/{idFormation}")
     @ResponseBody
-    public ResponseEntity<Object> addCertification(Model model, @PathVariable Long idFormation, @RequestBody Certificat certificat) throws Exception {
-        Formation formation = formationRepository.findByIdFormation(idFormation);
-        if (formation == null) {
-            return ResponseEntity.ok("Error: formation not found!");
-        }
+    public ResponseEntity<?> addCertification(Model model, @PathVariable Long idFormation, @RequestBody Certificat certificat)  {
         try {
-            Certificat getCertification = certificatRepository.save(certificat);
-            certificatRepository.save(getCertification);
-            formation.setId(idFormation);
-            formation.setCertificat(getCertification);
-            formationRepository.save(formation);
-            String qrCodePath = certificatService.createQrCode(model, formation.getId());
-            getCertification.setPathQrcode(qrCodePath);
-            certificatRepository.save(getCertification);
-            return ResponseEntity.ok(getCertification);
-        }catch (Exception ex){
-            throw new Exception(ex.getMessage());
+            return  certificatService.addCertificationToFormation(model, idFormation,  certificat);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+
     }
 
-    @GetMapping("/qrcode/{idFormation}")
+    @GetMapping("/AssignQRCodeToCertificat/{idFormation}")
     public String getQRCode(Model model, @PathVariable Long idFormation){
         return certificatService.createQrCode(model, idFormation);
     }
