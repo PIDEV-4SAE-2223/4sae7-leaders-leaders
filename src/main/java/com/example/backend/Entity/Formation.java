@@ -35,7 +35,6 @@ public class Formation implements Serializable {
     private float cost;
 
     @OneToOne
-    @JsonIgnore
     Image img;
 
     @ManyToMany(mappedBy = "formations_particip", cascade = CascadeType.ALL)
