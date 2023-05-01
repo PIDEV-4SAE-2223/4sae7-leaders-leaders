@@ -4,8 +4,6 @@ package com.example.backend.Entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -23,31 +21,36 @@ public class Formation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date start_date;
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date end_date;
-    @JsonIgnore
-    private int period = 0;
 
-    public void setPeriod(int period) {
-        int p;
-        p = ((int) ((start_date.getTime() - end_date.getTime()) / (24 * 60 * 60 * 1000)));
-        this.period = Math.abs(p);
-    }
+    private int period ;
 
     private float cost;
+
+    @OneToOne
+    @JsonIgnore
+    Image img;
+
     @ManyToMany(mappedBy = "formations_particip", cascade = CascadeType.ALL)
     @JsonIgnore
     Set<User> participants = new HashSet<>();
-    @ManyToMany(mappedBy = "formations_former", cascade = CascadeType.ALL)
+
+    @ManyToOne
     @JsonIgnore
-    Set<User> formers = new HashSet<>();
+    User former;
+
     @OneToMany(mappedBy = "formation", cascade = CascadeType.ALL)
     @JsonIgnore
     Set<Quizz> quizzes = new HashSet<>();
-    @ManyToOne
+    @OneToOne
     private Certificat certificat;
+
+
 }

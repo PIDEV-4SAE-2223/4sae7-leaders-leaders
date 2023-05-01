@@ -31,4 +31,7 @@ public class QuestQuiz implements Serializable {
     public void setId(Long idQuestQuizz) {
         this.id = idQuestQuizz;
     }
+
+
+
 }

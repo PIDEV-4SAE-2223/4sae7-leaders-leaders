@@ -1,5 +1,6 @@
 package com.example.backend.Entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -11,6 +12,7 @@ import javax.persistence.OneToOne;
 import com.example.backend.Entity.User;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +23,7 @@ import lombok.ToString;
 @ToString
 @Data
 @Entity
-public class EvaluationTraining {
+public class EvaluationTraining implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,8 +40,10 @@ public class EvaluationTraining {
     private int score;
     @OneToOne
     @JoinColumn(name = "trainer_id")
+    @JsonIgnore
     private User trainer;
     @OneToOne()
+    @JsonIgnore
     @JoinColumn(name = "learner_id")
     private User learner;
     private Date created_at;
