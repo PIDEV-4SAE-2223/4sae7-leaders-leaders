@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -20,7 +21,7 @@ import java.util.*;
 @Setter
 @ToString
 @Entity
-public class User implements UserDetails {
+public class User implements UserDetails, Serializable {
     @ManyToMany
     @JsonIgnore
     Set<Formation> formations_particip = new HashSet<>();

@@ -13,10 +13,9 @@ import java.util.List;
 import java.util.Set;
 
 @CrossOrigin(origins = "*")
-
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/formation")
+@RequestMapping(value = "/api/formation",produces = MediaType.APPLICATION_JSON_VALUE)
 public class FormationControler extends GenericController<Formation, Long> {
 
     private final InFormationService iFormationService;
@@ -84,6 +83,8 @@ public class FormationControler extends GenericController<Formation, Long> {
     public List<Formation> getAll() {
         return (List<Formation>) iFormationService.getall();
     }
+
+
 
 
 
