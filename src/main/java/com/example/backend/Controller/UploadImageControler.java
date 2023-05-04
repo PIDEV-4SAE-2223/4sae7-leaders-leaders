@@ -77,21 +77,21 @@ public class UploadImageControler {
 //    }
 
 
-    @GetMapping("/getImage/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<Resource> getImageFile(@PathVariable String filename) {
-
-        Resource file = sv.loadFile(filename);
-
-        String contentType = URLConnection.guessContentTypeFromName(filename);
-        if (contentType == null) {
-            contentType = "application/octet-stream";
-        }
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_TYPE, contentType)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
-                .body(file);
-    }
+//    @GetMapping("/getImage/{filename:.+}")
+//    @ResponseBody
+//    public ResponseEntity<Resource> getImageFile(@PathVariable String filename) {
+//
+//        Resource file = sv.loadFile(filename);
+//
+//        String contentType = URLConnection.guessContentTypeFromName(filename);
+//        if (contentType == null) {
+//            contentType = "application/octet-stream";
+//        }
+//
+//        return ResponseEntity.ok()
+//                .header(HttpHeaders.CONTENT_TYPE, contentType)
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+//                .body(file);
+//    }
 
 }

@@ -56,5 +56,11 @@ public class ImageDbService extends IGenericServiceImp<Image, Long> implements I
         return image;
     }
 
-
+    @Override
+    @Transactional
+    public byte[] getById(long id) {
+        Image dbImage = imageRepository.findById(id);
+        byte[] image = ImageUtil.decompressImage(dbImage.getImageData());
+        return image;
+    }
 }

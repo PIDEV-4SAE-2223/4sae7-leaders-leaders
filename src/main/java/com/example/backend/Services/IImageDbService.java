@@ -10,6 +10,6 @@ public interface IImageDbService extends IGenericService<Image,Long> {
     Image uploadImage(MultipartFile file) throws IOException ;
     Image getInfoByImageByName(String name) ;
     byte[] getImage(String name) ;
+    byte[] getById(long id);
 
-
-    }
+}

@@ -31,6 +31,6 @@ public interface InFormationService extends IGenericService<Formation, Long> {
     ResponseEntity<Object> AssignCertificatToFormation(Long idCertificat, Long idFormation);
 
    int calculPeriod(Formation formation ) ;
-
- }
+   Boolean deleteFormationAndAssociatedQuizzs(Long id) ;
+}
 

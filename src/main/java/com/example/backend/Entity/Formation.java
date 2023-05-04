@@ -19,8 +19,12 @@ import java.util.Set;
 public class Formation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+  //  @JsonIgnore
     private Long id;
+
     private String name;
+
+
 
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -34,21 +38,21 @@ public class Formation implements Serializable {
 
     private float cost;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     Image img;
 
-    @ManyToMany(mappedBy = "formations_particip", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "formationsparticip")
     @JsonIgnore
     Set<User> participants = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne()
     @JsonIgnore
     User former;
 
-    @OneToMany(mappedBy = "formation", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "formation")
     @JsonIgnore
     Set<Quizz> quizzes = new HashSet<>();
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Certificat certificat;
 
 
