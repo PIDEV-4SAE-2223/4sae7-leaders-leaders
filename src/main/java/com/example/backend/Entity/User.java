@@ -20,8 +20,10 @@ import java.util.*;
 @ToString
 @Entity
 public class User implements UserDetails {
+    @JsonIgnore
     @ManyToMany
     Set<Formation> formations_particip = new HashSet<>();
+    @JsonIgnore
     @ManyToMany
     Set<Formation> formations_former = new HashSet<>();
     @JsonIgnore

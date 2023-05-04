@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -88,6 +90,15 @@ public class AuthController extends GenericController<User, Long> {
         }
     }
 
+//    @GetMapping("/current")
+//    public User getCurrentUser(Authentication authentication) {
+//        if (authentication == null || !authentication.isAuthenticated()) {
+//            throw new UsernameNotFoundException("User not found");
+//        }
+//        User userDetails = (User) authentication.getPrincipal();
+//        return userRepository.findByEmail(userDetails.getUsername()).orElse(null);
+//    }
+
 
     @PostMapping("/createNewUser/{roleEnum}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -136,5 +147,22 @@ public class AuthController extends GenericController<User, Long> {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/{id}/edit")
+    public ResponseEntity<?> editUserAccount(@PathVariable("id") Long userId, @RequestBody User updatedUser) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found with ID " + userId));
+
+        user.setFirstname(updatedUser.getFirstname());
+        user.setLastname(updatedUser.getLastname());
+        user.setEmail(updatedUser.getEmail());
+        user.setPassword(updatedUser.getPassword());
+
+        userRepository.save(user);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/getUsers")
+    public List<User> getAllInterns() {
+        return userRepository.findAll();
+    }
 
 }
