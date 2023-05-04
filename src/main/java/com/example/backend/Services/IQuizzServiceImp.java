@@ -3,6 +3,7 @@ package com.example.backend.Services;
 import com.example.backend.Entity.Formation;
 import com.example.backend.Entity.QuestQuiz;
 import com.example.backend.Entity.Quizz;
+import com.example.backend.Repository.FormationRepository;
 import com.example.backend.Repository.QuestQuizRepository;
 import com.example.backend.Repository.QuizzRepository;
 import com.example.backend.generic.IGenericServiceImp;
@@ -21,6 +22,7 @@ public class IQuizzServiceImp extends IGenericServiceImp<Quizz,Long> implements 
     private final QuizzRepository quizzRepository;
     private final InFormationService iserviceFormation;
     private final QuestQuizRepository questQuizRepository;
+    private final FormationRepository  formationRepository;
 
     @Override
     public ResponseEntity<Object> addQuizz(@PathVariable Long idFormation, @RequestBody Quizz quizz) {
@@ -108,6 +110,15 @@ public class IQuizzServiceImp extends IGenericServiceImp<Quizz,Long> implements 
             ResponseEntity.ok("Quizz not found !");
         }
         return ResponseEntity.ok(quizz);
+    }
+
+
+    @Override
+    public Quizz assignQuizzToFormation(long idq, long idf){
+        Quizz quizz  = quizzRepository.findById(idq).orElse(null);
+        Formation formation = formationRepository.findById(idf).orElse(null);
+        quizz.setFormation(formation)   ;
+        return quizzRepository.save(quizz);
     }
 
 

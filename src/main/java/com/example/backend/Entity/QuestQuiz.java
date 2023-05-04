@@ -20,14 +20,19 @@ public class QuestQuiz implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
+    @JsonIgnore
     private Long id;
+
     private String question;
     @ManyToOne
     @JoinColumn(name = "quiz_id")
     @JsonIgnore
     private Quizz quizz;
+
+
     @OneToMany( mappedBy = "quest_quiz", cascade = CascadeType.ALL)
     Set<Proposition> propositions=new HashSet<>();
+
     public void setId(Long idQuestQuizz) {
         this.id = idQuestQuizz;
     }

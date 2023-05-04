@@ -18,6 +18,8 @@ import java.util.Set;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
+
+    void deleteByFormationsparticipId(long id);
     @Query("select u from User u where u.email = ?1")
     Optional<User> findByEmail(String email);
 

@@ -55,4 +55,13 @@ public class QuizzControler extends GenericController<Quizz,Long> {
 
         return iQuizzService.getQuizz(idQuizz);
     }
+
+
+    @PutMapping("/assignQuizzToFormation/{idq}/{idf}")
+    public Quizz assignQuizzToFormation (@PathVariable long idq,@PathVariable long idf){
+        return iQuizzService.assignQuizzToFormation(idq,idf);
+    }
+
+
+
 }

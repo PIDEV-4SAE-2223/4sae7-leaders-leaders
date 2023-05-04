@@ -18,26 +18,36 @@ import java.util.*;
 @ToString
 @Entity
 public class User implements UserDetails {
-    @ManyToMany
+    @ManyToMany()
     @JsonIgnore
-    Set<Formation> formations_particip = new HashSet<>();
+    Set<Formation> formationsparticip = new HashSet<>();
 
-    @OneToMany
+    @OneToMany (mappedBy = "former")
     @JsonIgnore
     Set<Formation> formations_former = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
     Set<Shift> shifts = new HashSet<>();
+
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userr")
     Set<LeaveAuth> leaves = new HashSet<>();
-    @OneToMany(mappedBy = "supplier")//many to many could be better
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userr")
+    Set<LeaveAuth> leaves = new HashSet<>();
+
+@OneToMany(mappedBy = "supplier")//many to many could be better
     Set<SupplierApplication> applications = new HashSet<>();
+
     @OneToOne(mappedBy = "trainer")
     @JsonIgnore
     private EvaluationTraining trainer;
+
     @OneToOne(mappedBy = "learner")
     @JsonIgnore
     private EvaluationTraining learner;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idUser", nullable = false)
