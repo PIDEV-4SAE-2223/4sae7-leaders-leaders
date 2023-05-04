@@ -1,6 +1,5 @@
 package com.example.backend.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,19 +19,14 @@ import java.util.*;
 @ToString
 @Entity
 public class User implements UserDetails {
-    @JsonIgnore
     @ManyToMany
     Set<Formation> formations_particip = new HashSet<>();
-    @JsonIgnore
     @ManyToMany
     Set<Formation> formations_former = new HashSet<>();
-    @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
     Set<Shift> shifts = new HashSet<>();
-    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userr")
     Set<LeaveAuth> leaves = new HashSet<>();
-    @JsonIgnore
     @OneToMany(mappedBy = "supplier")//many to many could be better
     Set<SupplierApplication> applications = new HashSet<>();
     @Id
