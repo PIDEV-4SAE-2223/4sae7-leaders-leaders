@@ -14,7 +14,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 @Entity
 public class Appointment implements Serializable {
 
@@ -39,9 +38,8 @@ public class Appointment implements Serializable {
     private boolean isReportsReady;
     private String Email ;
 
-    @ToString.Exclude
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id_user")
+
+    @ManyToOne
     private User user;
 
     @ToString.Exclude
@@ -52,5 +50,10 @@ public class Appointment implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "medecin_id_user")
     private User medecin;
+
+    @ManyToOne
+    AnalysisType type;
+    @ManyToOne
+    AnalysisCenter center;
 
 }

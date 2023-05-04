@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+        name="viewport">
+  <meta content="ie=edge" http-equiv="X-UA-Compatible">
+  <title>Spring Boot - Thymeleaf</title>
+  <link th:href="@{/main.css}" rel="stylesheet"/>
+</head>
+<body class="flex items-center justify-center h-screen">
+<div class="rounded-lg border shadow-lg p-10 w-3/5">
+  <div class="flex flex-row justify-between pb-4">
+
+    <div>
+
+      <center><h2 class="text-xl font-bold">Charles Nicoles Biochimical Laboratory<span class="text-green-600" th:text="Charles Nicoles Biochimical Laboratory"></span>
+      </h2></center>
+      <img src="photo.png" alt="Orange" style="width:300px;height:300px;">
+      <h2 class="text font-bold">Attestation de stage<span class="text-green-600" th:text="${intern.firstName}"></span>
+      </h2>
+
+    </div>
+
+  <div class="flex flex-col pb-8">
+    <div class="pb-2">
+      <h4 class="text">date de debut de stage:</h4>
+    </div>
+    <div>
+      <div class="text-xl font-bold" th:text="${intern.Internship.startDate}"></div>
+    </div>
+    <div class="pb-2">
+      <h4 class="text">date de fin de stage:</h4>
+    </div>
+    <div>
+      <div class="text-xl font-bold" th:text="${intern.Internship.endDate}"></div>
+    </div>
+    <p >Je soussigné, Madame/Mademoiselle/Monsieur <div class="text-xl font-bold" th:text="${intern.firstNAme},${intern.lastName}"></div>
+  </div> a effectué un stage au sein de notre laboratoire biochimique du <div class="text-xl font-bold" th:text="${intern.Internship.startDate}"></div> au
+  <div class="text-xl font-bold" th:text="${intern.Internship.endDate}"></div> en qualité de</p>.
+  </div>
+</div>
+</body>
+</html>

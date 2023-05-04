@@ -27,7 +27,7 @@ public class Answer_learner implements Serializable {
     User user;
 
 
-
     @ManyToMany
-    Set<Proposition> answers=new HashSet<>();
+    Set<Proposition> propositions = new HashSet<>();
 }
+//ylem les proposition men nafss l quest quizz

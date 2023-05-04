@@ -6,7 +6,9 @@ import lombok.experimental.FieldDefaults;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
 
 @Entity
 @Getter
@@ -16,17 +18,26 @@ import java.util.Set;
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Quizz implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
-    Long id;
-    String name;
-    @ManyToOne
-    Formation formation;
+    private Long id;
+    private String title;
+    private String description;
 
-    @OneToMany( mappedBy = "quizz", cascade = CascadeType.ALL)
+
+
+
+    @ManyToOne
+    @JoinColumn(name = "formation_id")
+    private Formation formation;
+
+    @OneToOne
+    @JoinColumn(name = "Leaner_id")
     @JsonIgnore
-    Set<Quest_quiz> quest_quizs=new HashSet<>();
+    private User learner;
+
+
+
 
 }

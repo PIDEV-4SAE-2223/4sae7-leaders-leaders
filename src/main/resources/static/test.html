@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Save Feedback</title>
+</head>
+<body>
+<div align="center">
+
+<form id="feedback-form" method="POST" action="http://localhost:8083/api/feedback/save/3/4" onsubmit="sendFormData(event)">
+
+
+
+    <table border="0" cellpadding="10">
+        <tr>
+            <td>
+                <p>1) Les objectifs de la formation ont-ils été clairement définis au début de la formation?</p>
+                <p><input type="radio" value="10"  name="question_1"  /><label>Yes</label></p>
+                <p><input type="radio" value="0"  name="question_1"  /><label>No</label></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>2) Je recommanderais cette formation à mes collègues</p>
+                <p><input type="radio" value="10" name="question_2"  /><label>Yes</label></p>
+                <p><input type="radio" value="0" name="question_2"  /><label>No</label></p>
+            </td>
+        </tr>
+        <tr>
+            <td>3) Le niveau de formateur vous a-t-il semblé:
+                <p><input type="radio" value="0" name="question_3"  /><label>Faible</label></p>
+                <p><input type="radio" value="5" name="question_3"  /><label>Correcte</label></p>
+                <p><input type="radio" value="10" name="question_3"  /><label>Trop élevé</label></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>4) Did the trainers use a language:</p>
+                <p><input type="radio" value="0" name="question_4"  /><label>Trop simple</label></p>
+                <p><input type="radio" value="5" name="question_4"  /><label>Adapté</label></p>
+                <p><input type="radio" value="10" name="question_4"  /><label>Trop technique</label></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>5 ) Comment évalueriez-vous les compétences démontrées par le formateur ?</p>
+                <p><input type="radio" value="0" name="question_5"  /><label>Pas du tout compétents</label></p>
+                <p><input type="radio" value="5" name="question_5" /><label>Peu compétents</label></p>
+                <p><input type="radio" value="10" name="question_5" /><label>Assez compétents</label></p>
+                <p><input type="radio" value="15" name="question_5" /><label>Très compétents</label></p>
+                <p><input type="radio" value="20" name="question_5" /><label>Extrêmement compétents</label></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>6) L?alternance de moments de « théorie » avec des travaux pratiques vous a-t-elle semblé équilibrée ?</p>
+                <p><input type="radio" value="0" name="question_6"  /><label>Non</label></p>
+                <p><input type="radio" value="10" name="question_6"  /><label>Oui</label></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>7) Globalement, que pensez-vous de la disponibilité de formateur ?</p>
+                <p><input type="radio" value="0" name="question_7"  /><label>Très mauvais</label></p>
+                <p><input type="radio" value="10" name="question_7"  /><label>Mauvais</label></p>
+                <p><input type="radio" value="15" name="question_7"  /><label>Bien</label></p>
+                <p><input type="radio" value="20" name="question_7"  /><label>Très bien</label></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>8) Quelle partie de la formation auriez-vous souhaité voir plus développée?</p>
+                <p><input type="checkbox" value="5" name="question_8"  /><label>Partie 1</label></p>
+                <p><input type="checkbox" value="5" name="question_8" /><label>Partie 2</label></p>
+                <p><input type="checkbox" value="5" name="question_8" /><label>Partie 3</label></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>9) Selon vous, les objectifs de la formation ont-ils été atteints ?</p>
+                <p><input type="radio" value="10" name="question_9" /><label>Oui</label></p>
+                <p><input type="radio" value="0" name="question_9" /><label>Non</label></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>10) Merci d'indiquer, le cas échéant, vos commentaires:</p>
+                <p>
+                    <textarea name="comment" rows="5" cols="80" ></textarea>
+                </p>
+            </td>
+        </tr>
+        <input type="hidden" name="trainer_id"  value="3"/>
+        <input type="hidden" name="learner_id" value="4" />
+        <input type="hidden" name="score" value="0" />
+
+        <tr>
+            <td colspan="2"><button type="submit" class="btn primary">Envoyer</button></td>
+        </tr>
+    </table>
+
+
+
+</form>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function sendFormData(event) {
+        event.preventDefault();
+
+        var formData = {
+            "question_1": $('input[name=question_1]').val(),
+            "question_2": $('input[name=question_2]').val(),
+            "question_3": $('input[name=question_3]').val(),
+            "question_4": $('input[name=question_4]').val(),
+            "question_5": $('input[name=question_5]').val(),
+            "question_6": $('input[name=question_6]').val(),
+            "question_7": $('input[name=question_7]').val(),
+            "question_8": $('input[name=question_8]').val(),
+            "question_9": $('input[name=question_9]').val(),
+            "comment": $('input[name=comment]').val(),
+            "score": $('input[name=score]').val(),
+            "trainer_id": $('input[name=trainer_id]').val(),
+            "learner_id": $('input[name=learner_id]').val()
+        };
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "http://localhost:8083/api/feedback/save/3/4",
+            data: JSON.stringify(formData),
+            dataType: 'json',
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+                alert('Feedback saved successfully!');
+            },
+            error: function (e) {
+                console.log("Error: ", e);
+                alert('Error occurred while saving feedback!');
+            }
+        });
+        return false;
+    }
+</script>
+    </div>
+
+</body>
+</html>

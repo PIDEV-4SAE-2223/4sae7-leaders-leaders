@@ -30,7 +30,16 @@ public class Certificat implements Serializable {
     @Temporal(TemporalType.DATE)
     Date date;
 
-    @OneToMany( mappedBy = "certificat"   /*, cascade = CascadeType.ALL*/)
     @JsonIgnore
-    Set<Formation> formations=new HashSet<>();
+    String pathQrcode;
+
+    @OneToOne( mappedBy = "certificat"   /*, cascade = CascadeType.ALL*/)
+    @JsonIgnore
+    Formation formation;
+
+    @OneToOne
+    @JsonIgnore
+    Image img ;
+
+
 }
