@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/imageDB")
+@RequestMapping(value="/imageDB",produces = MediaType.APPLICATION_JSON_VALUE)
 public class ImageDbControler {
 
 
@@ -47,12 +47,12 @@ public class ImageDbControler {
     }
 
 
-    @GetMapping("/getImageById/{id}")
-    public ResponseEntity<byte[]> getImageById(@PathVariable Long id) {
-        Image image = imageDataService.retrieveById(id);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + image.getName() + "\"")
-                .body(image.getImageData());
+    @GetMapping(value="/getImageById/{id}")
+    public ResponseEntity<?> getImageById(@PathVariable Long id) {
+        byte[] image = imageDataService.getById(id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(image);
     }
 ////// in Angular
 //    import { Component } from '@angular/core';

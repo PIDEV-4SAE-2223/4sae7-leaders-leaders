@@ -26,6 +26,8 @@ import lombok.ToString;
 public class EvaluationTraining implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+
     private Long id;
     private String question_1;
     private String question_2;
@@ -42,9 +44,11 @@ public class EvaluationTraining implements Serializable {
     @JoinColumn(name = "trainer_id")
     @JsonIgnore
     private User trainer;
+
     @OneToOne()
     @JsonIgnore
     @JoinColumn(name = "learner_id")
     private User learner;
+
     private Date created_at;
 }

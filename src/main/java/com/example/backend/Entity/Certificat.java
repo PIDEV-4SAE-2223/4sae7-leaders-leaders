@@ -23,6 +23,7 @@ public class Certificat implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
+    @JsonIgnore
     Long id;
     String name;
     String description;

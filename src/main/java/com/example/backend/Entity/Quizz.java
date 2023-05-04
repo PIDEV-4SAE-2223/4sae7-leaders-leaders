@@ -2,6 +2,8 @@ package com.example.backend.Entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,23 +23,22 @@ public class Quizz implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
+    @JsonIgnore
     private Long id;
+
     private String title;
     private String description;
-
-
-
-
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "formation_id")
     private Formation formation;
 
-    @OneToOne
-    @JoinColumn(name = "Leaner_id")
+    //unidirectionnel
+    @ManyToMany()
     @JsonIgnore
-    private User learner;
+    private Set<User> QuizzLearnes=new HashSet<>();
 
-
+    @OneToMany( mappedBy = "quizz", cascade = CascadeType.ALL)
+    Set<QuestQuiz> quest_quizs = new HashSet<>();
 
 
 }

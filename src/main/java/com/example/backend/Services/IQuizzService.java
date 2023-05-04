@@ -22,6 +22,7 @@ public interface IQuizzService extends IGenericService<Quizz, Long> {
     ResponseEntity<Object> updateQuestionsQuizz( Long idQuestQuizz,  QuestQuiz questionQuizz) ;
     ResponseEntity<Quizz> getQuizz( Long idQuizz);
 
+    public Quizz assignQuizzToFormation(long idq, long idf);
 
 
 
