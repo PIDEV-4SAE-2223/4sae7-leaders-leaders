@@ -69,6 +69,8 @@ public class AppointmentService extends IGenericServiceImp<Appointment, Long> im
         }
 
     }
+
+
     @Override
     @Scheduled(cron = "0 * * * * *")
     public List<Appointment> getAppointmentsByStatus() {
@@ -87,7 +89,6 @@ public class AppointmentService extends IGenericServiceImp<Appointment, Long> im
         }
         return countByStatus;
     }
-
 
 
 

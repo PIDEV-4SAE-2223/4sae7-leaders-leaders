@@ -4,8 +4,6 @@ package com.example.backend.Entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -18,50 +16,44 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Formation implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
-    Long id;
-    String name;
+  //  @JsonIgnore
+    private Long id;
+
+    private String name;
 
 
-    @JsonFormat(pattern="yyyy-MM-dd")
+
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    Date start_date;
-
-    @JsonFormat(pattern="yyyy-MM-dd")
+    private Date start_date;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    Date end_date;
+    private Date end_date;
+
+    private int period ;
+
+    private float cost;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    Image img;
+
+    @ManyToMany(mappedBy = "formationsparticip")
     @JsonIgnore
-    int period=0;
-    public void setPeriod(int period) {
-        int p;
-        p = ((int) ((start_date.getTime() - end_date.getTime()) / (24 * 60 * 60 * 1000)));
-        this.period = Math.abs(p);
-    }
+    Set<User> participants = new HashSet<>();
 
-    float cost;
-
-    @ManyToMany( mappedBy = "formations_particip", cascade = CascadeType.ALL)
+    @ManyToOne()
     @JsonIgnore
-    Set<User> participants=new HashSet<>();
+    User former;
 
-    @ManyToMany( mappedBy = "formations_former", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "formation")
     @JsonIgnore
-    Set<User> formers=new HashSet<>();
+    Set<Quizz> quizzes = new HashSet<>();
+    @OneToOne(cascade = CascadeType.ALL)
+    private Certificat certificat;
 
 
-
-    @OneToMany( mappedBy = "formation", cascade = CascadeType.ALL)
-    @JsonIgnore
-    Set<Quizz> quizzes=new HashSet<>();
-
-    @ManyToOne
-    Certificat  certificat;
 }
-
-
-

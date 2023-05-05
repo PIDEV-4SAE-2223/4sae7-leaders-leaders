@@ -1,5 +1,6 @@
 package com.example.backend.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,16 +19,17 @@ import java.util.Set;
 public class Answer_learner implements Serializable {
 
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
     Long id;
 
-
+    //unidirectionnel
     @ManyToOne
     User user;
 
 
-
     @ManyToMany
-    Set<Proposition> answers=new HashSet<>();
+    Set<Proposition> propositions = new HashSet<>();
 }
+//ylem les proposition men nafss l quest quizz

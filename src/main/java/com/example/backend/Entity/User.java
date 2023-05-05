@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -19,20 +19,33 @@ import java.util.*;
 @Setter
 @ToString
 @Entity
-public class User implements UserDetails {
-    @ManyToMany
-    Set<Formation> formations_particip = new HashSet<>();
-    @ManyToMany
-    Set<Formation> formations_former = new HashSet<>();
+public class User implements UserDetails, Serializable {
+    @ManyToMany()
+
+    Set<Formation> formationsparticip = new HashSet<>();
+
+    @OneToMany (mappedBy = "former")
     @JsonIgnore
+    Set<Formation> formations_former = new HashSet<>();
+
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
     Set<Shift> shifts = new HashSet<>();
+
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userr")
     Set<LeaveAuth> leaves = new HashSet<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "supplier")//many to many could be better
+
+   @OneToMany(mappedBy = "supplier")//many to many could be better
     Set<SupplierApplication> applications = new HashSet<>();
+
+    @OneToOne(mappedBy = "trainer")
+    @JsonIgnore
+    private EvaluationTraining trainer;
+
+    @OneToOne(mappedBy = "learner")
+    @JsonIgnore
+    private EvaluationTraining learner;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idUser", nullable = false)
@@ -43,12 +56,8 @@ public class User implements UserDetails {
     private String lastname;
     private String password;
     private String birthdate;
-
     private Sexe sexe;
     private int age;
-
-
-
     private String adresse;
     @Email
     private String email;
@@ -56,6 +65,7 @@ public class User implements UserDetails {
     private int failedLoginAttempts = 0;
     private boolean accountLocked = false;
     private LocalDateTime lastLockTime = LocalDateTime.now();
+    private String skills;
     @Getter
     @Setter
     @ManyToMany(fetch = FetchType.EAGER)
@@ -74,7 +84,6 @@ public class User implements UserDetails {
         }
         return authorities;
     }
-
 
     @Override
     public String getPassword() {
@@ -105,6 +114,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-
 }

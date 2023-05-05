@@ -52,7 +52,14 @@ public class AuthenticationService {
         if (repository.existsByEmail(request.getEmail())) {
             throw new EmailExistsException("Email already exists");
         }
-        var user = User.builder().firstname(request.getFirstName()).lastname(request.getLastName()).email(request.getEmail()).username(request.getUsername()).birthdate(request.getBirthdate()).password(passwordEncoder.encode(request.getPassword())).roles(roleRepository.findByRole(RoleEnum.ROLE_USER)).build();
+        var user = User.builder().firstname(request.getFirstName())
+                .lastname(request.getLastName())
+                .email(request.getEmail())
+                .username(request.getUsername())
+                .birthdate(request.getBirthdate())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .roles(roleRepository.findByRole(RoleEnum.ROLE_USER))
+                .build();
 
         user.setPasswordneedschange(false);
         logger.debug("RegisterRequest object: {}", request.toString());
