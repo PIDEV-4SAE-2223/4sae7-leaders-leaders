@@ -24,6 +24,7 @@ import java.util.Set;
 @AllArgsConstructor
 @RequestMapping(value = "/api/formation" , produces = MediaType.APPLICATION_JSON_VALUE
 )
+
 public class FormationControler extends GenericController<Formation, Long> {
 
     private final InFormationService iFormationService;
