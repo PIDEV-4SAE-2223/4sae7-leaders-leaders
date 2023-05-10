@@ -2,6 +2,7 @@ package com.example.backend.Controller;
 import com.example.backend.Entity.Formation;
 import com.example.backend.Entity.Image;
 import com.example.backend.Entity.ImageAndFormation;
+import com.example.backend.Entity.Quizz;
 import com.example.backend.Repository.imageAndFormationRepository;
 import com.example.backend.Services.IImageDbService;
 import com.example.backend.Services.InFormationService;
@@ -21,13 +22,22 @@ import java.util.Set;
 @CrossOrigin(origins = "*")
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "/api/formation",produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/formation" , produces = MediaType.APPLICATION_JSON_VALUE
+)
 public class FormationControler extends GenericController<Formation, Long> {
 
     private final InFormationService iFormationService;
     private final IImageDbService imageDataService;
+
     private final com.example.backend.Repository.imageAndFormationRepository imageAndFormationRepository;
 
+
+
+    @GetMapping("/getQuizzs/{idF}")
+    public Set<Quizz> getQuizzs(@PathVariable Long idF) {
+
+        return iFormationService.getQuizzs(idF);
+    }
 
     @PostMapping("/addFormation")
     public Formation add(@RequestBody Formation  f) {
@@ -36,18 +46,28 @@ public class FormationControler extends GenericController<Formation, Long> {
 
     @PostMapping(value="/uploadAndAssignImageToFormation/{idFormation}" ,consumes =  "multipart/form-data" )
 
-    public ResponseEntity<?> uploadAndAssignImageToFormation(@RequestParam("image") MultipartFile file,@PathVariable Long idFormation) throws IOException {
+    public ResponseEntity<byte[]> uploadAndAssignImageToFormation(@RequestParam("image") MultipartFile file,@PathVariable Long idFormation) throws IOException {
 
-        return iFormationService.uploadAndAssignImageToFormation(file,idFormation);
+         iFormationService.uploadAndAssignImageToFormation(file,idFormation);
+        byte[] image = imageDataService.getById(((iFormationService.retrieveById(idFormation)).getImg()).getId());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(image);
     }
 
 
 
 
 
-    @PostMapping(value="/AssignImageToFormation/{idFormation}" )
-    public ResponseEntity<Object> AssignImageToFormation(@PathVariable Long idImage , @PathVariable Long idFormation ) {
-        return iFormationService.AssignImageToFormation(idImage,idFormation);
+    @PostMapping(value="/AssignImageToFormation/{idImage}/{idFormation}")
+    public ResponseEntity<byte[]> AssignImageToFormation(@PathVariable Long idImage , @PathVariable Long idFormation ) {
+         iFormationService.AssignImageToFormation(idImage,idFormation);
+        byte[] image = imageDataService.getById(idImage);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(image);
     }
 
 
@@ -106,12 +126,18 @@ public class FormationControler extends GenericController<Formation, Long> {
     @GetMapping(value = "/getImageById/{idFormation}")
     public ResponseEntity<?> getImageById(@PathVariable Long idFormation) {
         Formation f=iFormationService.retrieveById(idFormation);
-        long id =f.getImg().getId();
-        System.out.println(id);
-        byte[] image = imageDataService.getById(id);
-        return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.valueOf("image/png"))
-                .body(image);
+
+        if (f.getImg()!=null) {
+            long id =f.getImg().getId();
+            System.out.println(id);
+            byte[] image = imageDataService.getById(id);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(MediaType.valueOf("image/png"))
+                    .body(image);
+        }
+        else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Image not found for formation ID: " + idFormation);
     }
 
     @GetMapping(value = "/getImageAndFormationById/{id}")

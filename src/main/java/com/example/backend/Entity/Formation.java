@@ -50,7 +50,6 @@ public class Formation implements Serializable {
     User former;
 
     @OneToMany(mappedBy = "formation")
-    @JsonIgnore
     Set<Quizz> quizzes = new HashSet<>();
     @OneToOne(cascade = CascadeType.ALL)
     private Certificat certificat;

@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 
+@CrossOrigin(origins = "*")
+
 @RestController
 @AllArgsConstructor
 @RequestMapping(value="/imageDB",produces = MediaType.APPLICATION_JSON_VALUE)
@@ -22,11 +24,13 @@ public class ImageDbControler {
     private final IImageDbService imageDataService;
 
     @PostMapping(value="/uploadImage" ,consumes =  "multipart/form-data")
-    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
+    public ResponseEntity<byte[]> uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
         Image response = imageDataService.uploadImage(file);
+        byte[] image = imageDataService.getById(response.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(response);
+                .contentType(MediaType.valueOf("image/png"))
+                .body(image);
     }
 
     @GetMapping("/getImageInfoByName/{name}")
@@ -54,31 +58,7 @@ public class ImageDbControler {
                 .contentType(MediaType.valueOf("image/png"))
                 .body(image);
     }
-////// in Angular
-//    import { Component } from '@angular/core';
-//import { HttpClient } from '@angular/common/http';
-//
-//    @Component({
-//            selector: 'app-image',
-//            template: '<img [src]="imageUrl" alt="Image">',
-//            })
-//    export class ImageComponent {
-//        imageUrl: string;
-//
-//        constructor(private http: HttpClient) {}
-//
-//        ngOnInit() {
-//    const imageId = 1; // Replace with the ID of the image you want to display
-//            this.http.get(`http://localhost:8080/images/${imageId}`, { responseType: 'blob' })
-//      .subscribe((response: Blob) => {
-//        const reader = new FileReader();
-//                reader.readAsDataURL(response);
-//                reader.onloadend = () => {
-//          const base64data = reader.result.toString().split(',')[1];
-//                    this.imageUrl = `data:image/jpeg;base64,${base64data}`;
-//                };
-//            });
-//        }
-//    }
+
+
 
 }

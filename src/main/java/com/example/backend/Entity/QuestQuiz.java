@@ -20,7 +20,6 @@ public class QuestQuiz implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
-    @JsonIgnore
     private Long id;
 
     private String question;

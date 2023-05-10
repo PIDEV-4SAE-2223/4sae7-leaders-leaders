@@ -8,7 +8,7 @@
 <body>
 <div align="center">
 	<h1>Feedback</h1>
-	<form  th:action="@{/api/feedback/save/1/4}" th:object="${com.example.backend.Entity.EvaluationTraining}" method="post">
+	<form  th:action="@{/api/feedback/save/6/4}" th:object="${com.example.backend.Entity.EvaluationTraining}" method="post">
 
 		<table border="0" cellpadding="10">
 			<tr>
@@ -67,14 +67,14 @@
 					<p><input type="radio" value="20" th:field="*{question_7}" /><label>Very good</label></p>
 				</td>
 			</tr>
-			<tr>
-				<td>
-					<p>8) Quelle partie de la formation auriez-vous souhaité voir plus développée?</p>
-					<p><input type="checkbox" value="5" th:field="*{question_8}" /><label>Partie 1</label></p>
-					<p><input type="checkbox" value="5" th:field="*{question_8}" /><label>Partie 2</label></p>
-					<p><input type="checkbox" value="5" th:field="*{question_8}" /><label>Partie 3</label></p>
-				</td>
-			</tr>
+<!--			<tr>-->
+<!--				<td>-->
+<!--					<p>8) Quelle partie de la formation auriez-vous souhaité voir plus développée?</p>-->
+<!--					<p><input type="checkbox" value="5" th:field="*{question_8c1}" /><label>Partie 1</label></p>-->
+<!--					<p><input type="checkbox" value="5" th:field="*{question_8c2}" /><label>Partie 2</label></p>-->
+<!--					<p><input type="checkbox" value="5" th:field="*{question_8c3}" /><label>Partie 3</label></p>-->
+<!--				</td>-->
+<!--			</tr>-->
 			<tr>
 				<td>
 					<p>9) Selon vous, les objectifs de la formation ont-ils été atteints ?</p>
@@ -90,7 +90,7 @@
 					</p>
 				</td>
 			</tr>
-			<input type="hidden" name="trainer_id"  value="1"/>
+			<input type="hidden" name="trainer_id"  value="6"/>
 			<input type="hidden" name="learner_id" value="4" />
 			<input type="hidden" name="score" value="0" />
 

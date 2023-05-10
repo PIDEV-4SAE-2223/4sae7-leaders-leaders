@@ -16,7 +16,7 @@ public interface IEvaluationTrainingService extends IGenericService<EvaluationTr
     List<EvaluationTraining> findEvaluationsByLearner(Long idLearner);
     String checkUserByPathVariable(User userTrainer, User userLearner) ;
     int calculScore(EvaluationTraining evaluationTraining);
-    ResponseEntity<Object> saveAndAssignFeedback(Long idTrainer, Long idLearner, EvaluationTraining evaluationTraining) ;
+    EvaluationTraining saveAndAssignFeedback(Long idTrainer, Long idLearner, EvaluationTraining evaluationTraining) ;
     ResponseEvaluationsTrainer getFeedbackByTrainer(Long idtrainer);
     ResponseEvaluationsTrainer getFeedbackByLearner( Long idLearner);
 

@@ -3,6 +3,7 @@ package com.example.backend.Services;
 import com.example.backend.Entity.Certificat;
 import com.example.backend.Entity.User;
 import com.example.backend.Repository.UserRepository;
+import com.example.backend.Repository.shiftRepo;
 import com.example.backend.dto.ResponseEvaluationsTrainer;
 import com.example.backend.generic.IGenericServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +29,13 @@ public class EvaluationTrainingServices extends IGenericServiceImp<EvaluationTra
 
     private final EvaluationTrainingRepository evaluationTrainingRepository;
     private final UserRepository userRepository;
-
+    private final com.example.backend.Repository.shiftRepo shiftRepo;
 
 
     @Override
-    public boolean isEvaluationExist(Long idLearner, Long idTrainer) {
-        List<EvaluationTraining> evolution = evaluationTrainingRepository.findByIdTrainerAndIdLearner(idTrainer, idLearner);
-        return !evolution.isEmpty();
+    public boolean isEvaluationExist( Long idTrainer,Long idLearner) {
+        List<EvaluationTraining> evoluation = evaluationTrainingRepository.findByTrainerIdAndLearnerId(idTrainer, idLearner);
+        return !evoluation.isEmpty();
     }
 
 
@@ -71,61 +72,82 @@ public class EvaluationTrainingServices extends IGenericServiceImp<EvaluationTra
 
     @Override
     public int calculScore(EvaluationTraining evaluationTraining) {
-        int q1 = 0, q2 = 0, q3 = 0, q4 = 0, q5 = 0, q6 = 0, q7 = 0, q8 = 0, q9 = 0, score;
-        if (!evaluationTraining.getQuestion_1().isEmpty()) {
-            q1 = Integer.parseInt(evaluationTraining.getQuestion_1());
+        int q1 = 0, q2 = 0, q3 = 0, q4 = 0, q5 = 0, q6 = 0, q7 = 0, q8c1 = 0,  q8c2 = 0, q8c3 = 0, q9 = 0, score;
+
+        boolean isQuestion8c1Selected = evaluationTraining.isQuestion8c1();
+        boolean isQuestion8c2Selected = evaluationTraining.isQuestion8c2();
+        boolean isQuestion8c3Selected = evaluationTraining.isQuestion8c3();
+
+        if (isQuestion8c1Selected) {
+            q8c1 = 5;
         }
-        if (!evaluationTraining.getQuestion_2().isEmpty()) {
-            q2 = Integer.parseInt(evaluationTraining.getQuestion_2());
+        if (isQuestion8c2Selected) {
+            q8c2 = 5;
         }
-        if (!evaluationTraining.getQuestion_3().isEmpty()) {
-            q3 = Integer.parseInt(evaluationTraining.getQuestion_3());
+        if (isQuestion8c3Selected) {
+            q8c3 = 5;
         }
-        if (!evaluationTraining.getQuestion_4().isEmpty()) {
-            q4 = Integer.parseInt(evaluationTraining.getQuestion_4());
+
+
+
+        if (!evaluationTraining.getQuestion1().isEmpty()) {
+            q1 = Integer.parseInt(evaluationTraining.getQuestion1());
         }
-        if (!evaluationTraining.getQuestion_5().isEmpty()) {
-            q5 = Integer.parseInt(evaluationTraining.getQuestion_5());
+        if (!evaluationTraining.getQuestion2().isEmpty()) {
+            q2 = Integer.parseInt(evaluationTraining.getQuestion2());
         }
-        if (!evaluationTraining.getQuestion_6().isEmpty()) {
-            q6 = Integer.parseInt(evaluationTraining.getQuestion_6());
+        if (!evaluationTraining.getQuestion3().isEmpty()) {
+            q3 = Integer.parseInt(evaluationTraining.getQuestion3());
         }
-        if (!evaluationTraining.getQuestion_7().isEmpty()) {
-            q7 = Integer.parseInt(evaluationTraining.getQuestion_7());
+        if (!evaluationTraining.getQuestion4().isEmpty()) {
+            q4 = Integer.parseInt(evaluationTraining.getQuestion4());
         }
-        if (!evaluationTraining.getQuestion_8().isEmpty()) {
-            q8 = Integer.parseInt(evaluationTraining.getQuestion_8());
+        if (!evaluationTraining.getQuestion5().isEmpty()) {
+            q5 = Integer.parseInt(evaluationTraining.getQuestion5());
         }
-        if (!evaluationTraining.getQuestion_9().isEmpty()) {
-            q9 = Integer.parseInt(evaluationTraining.getQuestion_9());
+        if (!evaluationTraining.getQuestion6().isEmpty()) {
+            q6 = Integer.parseInt(evaluationTraining.getQuestion6());
         }
-        score = q1 + q2 + q3 + q4 + q5 + q6 + q7 + q8 + q9;
+        if (!evaluationTraining.getQuestion7().isEmpty()) {
+            q7 = Integer.parseInt(evaluationTraining.getQuestion7());
+        }
+
+        if (!evaluationTraining.getQuestion9().isEmpty()) {
+            q9 = Integer.parseInt(evaluationTraining.getQuestion9());
+        }
+        score = q1 + q2 + q3 + q4 + q5 + q6 + q7 - q8c1 -q8c2  -q8c3 + q9;
+        if (score<0)
+           return 0;
         return score;
     }
 
     @Override
-    public ResponseEntity<Object> saveAndAssignFeedback(@PathVariable Long idTrainer, @PathVariable Long idLearner, @RequestBody EvaluationTraining evaluationTraining) {
+    public EvaluationTraining saveAndAssignFeedback(@PathVariable Long idTrainer, @PathVariable Long idLearner, @RequestBody EvaluationTraining evaluationTraining) {
         User userTrainer = userRepository.findById(idTrainer).orElseThrow(() -> new NotFoundException("Id trainer not found"));
         User userLearner = userRepository.findById(idLearner).orElseThrow(() -> new NotFoundException("Id learner not found"));
         String checkPathVariable = this.checkUserByPathVariable(userTrainer, userLearner);
-        if (!checkPathVariable.equals("valid")) {
-            return ResponseEntity.ok(checkPathVariable);
+       if (!checkPathVariable.equals("valid")) {
+           return null;
         }
         boolean isEvaluationExist = this.isEvaluationExist(idTrainer, idLearner);
-        if (isEvaluationExist) {
-            return ResponseEntity.ok("Evaluation already exist!");
+       System.out.println((isEvaluationExist));
+        if (isEvaluationExist==true) {
+            return null;
         }
-        try {
-            evaluationTraining.setTrainer(userTrainer);
-            evaluationTraining.setLearner(userLearner);
-            evaluationTraining.setCreated_at(new Date());
-            evaluationTraining.setScore(this.calculScore(evaluationTraining));
-            EvaluationTraining saveFeedback = evaluationTrainingRepository.save(evaluationTraining);
-            return ResponseEntity.ok(saveFeedback);
-        } catch (Exception ex) {
-            return ResponseEntity.ok(ex.getMessage());
+
+
+        evaluationTraining.setCreatedAt(new Date());
+        evaluationTraining.setScore(this.calculScore(evaluationTraining));
+
+        evaluationTraining.setTrainer(userTrainer);
+        evaluationTraining.setLearner(userLearner);
+
+        EvaluationTraining saveFeedback = evaluationTrainingRepository.save(evaluationTraining);
+
+        return saveFeedback;
+
         }
-    }
+
 
     @Override
     public ResponseEvaluationsTrainer getFeedbackByTrainer(Long idtrainer){

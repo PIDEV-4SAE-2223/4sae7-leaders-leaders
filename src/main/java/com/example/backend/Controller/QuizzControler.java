@@ -3,19 +3,30 @@ package com.example.backend.Controller;
 import com.example.backend.Entity.QuestQuiz;
 import com.example.backend.Entity.Quizz;
 import com.example.backend.Services.IQuizzService;
+import com.example.backend.Services.InFormationService;
 import com.example.backend.generic.GenericController;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/quizz")
+@RequestMapping(value="/api/quizz", produces = MediaType.APPLICATION_JSON_VALUE)
 public class QuizzControler extends GenericController<Quizz,Long> {
 
     private final IQuizzService iQuizzService;
+    private final InFormationService iFormationService;
+
+    @GetMapping("/getQuizzs/{idF}")
+    public Set<Quizz> getQuizzs(@PathVariable Long idF) {
+
+        return iFormationService.getQuizzs(idF);
+    }
 
     @PostMapping("/add/{idFormation}")
     @ResponseBody
@@ -24,8 +35,7 @@ public class QuizzControler extends GenericController<Quizz,Long> {
     }
 
     @PostMapping("/add/question/{idQuizz}")
-    @ResponseBody
-    public ResponseEntity<Object> addQuestionQuizz(@PathVariable Long idQuizz, @RequestBody QuestQuiz questionQuizz) {
+    public QuestQuiz addQuestionQuizz(@PathVariable Long idQuizz, @RequestBody QuestQuiz questionQuizz) {
         return iQuizzService.addAndAssignQuestionQuizz(idQuizz,questionQuizz);
     }
 

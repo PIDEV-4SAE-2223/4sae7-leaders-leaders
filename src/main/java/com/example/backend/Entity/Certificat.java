@@ -23,10 +23,11 @@ public class Certificat implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
-    @JsonIgnore
+   // @JsonIgnore
     Long id;
     String name;
     String description;
+    String learner_name ;
     @JsonFormat(pattern="yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     Date date;
@@ -39,7 +40,7 @@ public class Certificat implements Serializable {
     Formation formation;
 
     @OneToOne
-    @JsonIgnore
+
     Image img ;
 
 

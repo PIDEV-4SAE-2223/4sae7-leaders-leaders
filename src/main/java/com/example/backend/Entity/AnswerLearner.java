@@ -16,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Answer_learner implements Serializable {
+public class AnswerLearner implements Serializable {
 
     @Id
     @JsonIgnore

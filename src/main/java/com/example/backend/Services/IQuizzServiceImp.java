@@ -1,9 +1,11 @@
 package com.example.backend.Services;
 
 import com.example.backend.Entity.Formation;
+import com.example.backend.Entity.Proposition;
 import com.example.backend.Entity.QuestQuiz;
 import com.example.backend.Entity.Quizz;
 import com.example.backend.Repository.FormationRepository;
+import com.example.backend.Repository.PropositionRepository;
 import com.example.backend.Repository.QuestQuizRepository;
 import com.example.backend.Repository.QuizzRepository;
 import com.example.backend.generic.IGenericServiceImp;
@@ -23,6 +25,8 @@ public class IQuizzServiceImp extends IGenericServiceImp<Quizz,Long> implements 
     private final InFormationService iserviceFormation;
     private final QuestQuizRepository questQuizRepository;
     private final FormationRepository  formationRepository;
+    private final PropositionRepository propositionRepository;
+
 
     @Override
     public ResponseEntity<Object> addQuizz(@PathVariable Long idFormation, @RequestBody Quizz quizz) {
@@ -36,6 +40,7 @@ public class IQuizzServiceImp extends IGenericServiceImp<Quizz,Long> implements 
             }
             try {
                 quizz.setFormation(formation);
+                quizz.setTraining_name(formation.getName());
                 Quizz addQuizz = quizzRepository.save(quizz);
                 return ResponseEntity.ok(addQuizz);
             } catch (Exception ex) {
@@ -46,18 +51,23 @@ public class IQuizzServiceImp extends IGenericServiceImp<Quizz,Long> implements 
     }
 
     @Override
-    public ResponseEntity<Object> addAndAssignQuestionQuizz(@PathVariable Long idQuizz, @RequestBody QuestQuiz questionQuizz) {
+    public QuestQuiz addAndAssignQuestionQuizz(@PathVariable Long idQuizz, @RequestBody QuestQuiz questionQuizz) {
         Quizz quizz = quizzRepository.findByIdQuizz(idQuizz);
-        if (quizz == null) {
-            return ResponseEntity.ok("Id quizz is required!");
+        if (quizz != null) {
+
+                questionQuizz.setQuizz(quizz);
+
+                QuestQuiz question = questQuizRepository.save(questionQuizz);
+
+            for (Proposition p: questionQuizz.getPropositions() ) {
+                p.setQuest_quiz(questionQuizz);
+                propositionRepository.save(p);
+
+            }
+                return question;
+
         }
-        try {
-            questionQuizz.setQuizz(quizz);
-            QuestQuiz question = questQuizRepository.save(questionQuizz);
-            return ResponseEntity.ok(question);
-        }catch (Exception ex) {
-            return ResponseEntity.ok(ex.getMessage());
-        }
+        else return null;
     }
 
 
@@ -118,6 +128,7 @@ public class IQuizzServiceImp extends IGenericServiceImp<Quizz,Long> implements 
         Quizz quizz  = quizzRepository.findById(idq).orElse(null);
         Formation formation = formationRepository.findById(idf).orElse(null);
         quizz.setFormation(formation)   ;
+        quizz.setTraining_name(formation.getName());
         return quizzRepository.save(quizz);
     }
 

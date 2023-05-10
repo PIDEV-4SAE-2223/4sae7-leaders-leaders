@@ -23,13 +23,17 @@ public class Quizz implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
-    @JsonIgnore
     private Long id;
 
     private String title;
     private String description;
+
+
+    private String training_name;
+
     @ManyToOne()
     @JoinColumn(name = "formation_id")
+    @JsonIgnore
     private Formation formation;
 
     //unidirectionnel
@@ -38,6 +42,7 @@ public class Quizz implements Serializable {
     private Set<User> QuizzLearnes=new HashSet<>();
 
     @OneToMany( mappedBy = "quizz", cascade = CascadeType.ALL)
+
     Set<QuestQuiz> quest_quizs = new HashSet<>();
 
 

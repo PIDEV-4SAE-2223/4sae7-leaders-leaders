@@ -2,6 +2,7 @@ package com.example.backend.Services;
 
 import com.example.backend.Entity.Formation;
 import com.example.backend.Entity.Image;
+import com.example.backend.Entity.Quizz;
 import com.example.backend.dto.FormationDTO;
 import com.example.backend.dto.ResponseFormation;
 import com.example.backend.generic.IGenericService;
@@ -32,5 +33,6 @@ public interface InFormationService extends IGenericService<Formation, Long> {
 
    int calculPeriod(Formation formation ) ;
    Boolean deleteFormationAndAssociatedQuizzs(Long id) ;
+   Set<Quizz> getQuizzs(long id);
 }
 

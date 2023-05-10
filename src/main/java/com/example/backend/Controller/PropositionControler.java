@@ -5,14 +5,17 @@ import com.example.backend.Services.IPropositionService;
 import com.example.backend.dto.ResponseProposition;
 import com.example.backend.generic.GenericController;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/proposition")
+@RequestMapping(value="/api/proposition", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PropositionControler extends GenericController<Proposition, Long> {
 
     private final IPropositionService iPropositionService;

@@ -11,8 +11,7 @@ import javax.persistence.Column;
 import java.util.List;
 
 public interface EvaluationTrainingRepository extends JpaRepository<EvaluationTraining, Long> {
-    @Query("select evaluationTraining from EvaluationTraining evaluationTraining where evaluationTraining.trainer.id = :idTrainer and evaluationTraining.learner.id = :idLearner")
-    List<EvaluationTraining> findByIdTrainerAndIdLearner(@Param("idTrainer") Long idTrainer, @Param("idLearner") Long  idLearner);
+    List<EvaluationTraining> findByTrainerIdAndLearnerId(Long idTrainer,Long  idLearner);
 
     @Query("select evaluationTraining from EvaluationTraining evaluationTraining where evaluationTraining.trainer.id = :idTrainer")
     List<EvaluationTraining> findByIdTrainer(@Param("idTrainer") Long idTrainer);

@@ -16,7 +16,7 @@ import java.util.Optional;
 public interface IQuizzService extends IGenericService<Quizz, Long> {
 
     ResponseEntity<Object> addQuizz( Long idFormation, Quizz quizz) ;
-    ResponseEntity<Object> addAndAssignQuestionQuizz( Long idQuizz, QuestQuiz questionQuizz) ;
+    QuestQuiz addAndAssignQuestionQuizz( Long idQuizz, QuestQuiz questionQuizz) ;
 
     ResponseEntity<Object> addAndAssignManyQuestionsQuizz( Long idQuizz,  List<QuestQuiz> manyquestionsQuizz);
     ResponseEntity<Object> updateQuestionsQuizz( Long idQuestQuizz,  QuestQuiz questionQuizz) ;

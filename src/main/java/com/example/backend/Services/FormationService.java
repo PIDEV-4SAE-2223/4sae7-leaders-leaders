@@ -45,6 +45,15 @@ public class FormationService extends IGenericServiceImp<Formation, Long> implem
 
     }
 
+    @Override
+    public Set<Quizz> getQuizzs (long idF){
+        Formation f= formationRepository.findById(idF).orElseThrow(() -> new NotFoundException("Training Not Found!!"));;
+        if (f!=null)
+        return  f.getQuizzes();
+        else
+            return null;
+    }
+
 
     @Override
     public int calculPeriod(Formation formation ) {

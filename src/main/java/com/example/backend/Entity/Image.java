@@ -18,14 +18,13 @@ public class Image implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
+
     private Long id;
 
     private String name;
     private String type;
     @Lob
     private byte[] imageData;
-    private String url;
 
 //    @Lob
 //    //used to indicate that the annotated attribute should be persisted in a "large object" field in DB

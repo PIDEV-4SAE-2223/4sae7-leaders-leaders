@@ -33,6 +33,6 @@ public class Proposition implements Serializable {
 
     @ManyToMany(mappedBy = "propositions", cascade = CascadeType.ALL)
     @JsonIgnore
-    Set<Answer_learner> answer_learners = new HashSet<>();
+    Set<AnswerLearner> answer_learners = new HashSet<>();
 
 }
